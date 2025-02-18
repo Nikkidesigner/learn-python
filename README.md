@@ -52,6 +52,15 @@ Python is a general-purpose programming language suitable for the development of
 - Console-based Applications
 - CAD Applications
 - Game Development
+ 
+
+<img src="https://github.com/user-attachments/assets/7b755817-2cc3-44f1-834b-ef68076b7149" height = "200" width="200" />
+<img src="https://github.com/user-attachments/assets/138f2902-e2e3-477e-b51f-6dba19a85840" height = "200" width="200" />
+<img src="https://github.com/user-attachments/assets/afd21545-d1dd-4a13-bd56-f0ac07edb484" height = "200" width="200" />
+<img src="https://github.com/user-attachments/assets/8ba41baf-7bb4-421f-b8b9-7055e230a0c3" height = "200" width="200" />
+
+
+
 
 
 ## Application Areas
@@ -158,6 +167,8 @@ Python is an interpreter-based language, which means that Python code is execute
 - **Windows**: The executable (`python.exe`) is found in the installation folder (e.g., `C:\python311`).
 
 ## How Python Interpreter Works
+
+![image](https://github.com/user-attachments/assets/20702ee2-7de5-47a0-b34c-69f54f239d67)
 
 The Python interpreter consists of two main components:
 
