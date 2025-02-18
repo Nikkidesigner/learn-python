@@ -131,9 +131,44 @@ z = str(100)       # Converts int to string
 print(type(x), type(y), type(z))
 ```
 
+## 10. F-Strings in Python
+F-strings (formatted string literals) provide a concise and readable way to embed expressions and variables inside strings.
+
+### Example:
+```python
+name = "Alice"
+age = 30
+print(f"My name is {name} and I am {age} years old.")
+```
+
+### Benefits of F-Strings:
+- **Readability & Simplicity**: More concise compared to `.format()` and `%` formatting.
+- **Performance**: Faster execution.
+- **Supports Inline Expressions**: You can evaluate expressions inside `{}`.
+- **Handles Quotes Easily**.
+- **Used in Date Formatting**:
+
+```python
+import datetime
+today = datetime.datetime.today()
+print(f"Today's date is {today:%B %d, %Y}.")
+```
+
+- **Access Dictionary Values**:
+```python
+user = {'name': 'Bob', 'age': 25}
+print(f"User {user['name']} is {user['age']} years old.")  
+```
+
+### Printing Braces in F-Strings:
+```python
+print(f"{{Hello, Geek}}")  # Output: {Hello, Geek}
+```
+
 ## Conclusion
-Python offers a rich set of built-in data types that allow developers to work with various data structures efficiently. Understanding these types is crucial for writing effective Python programs.
+Python offers a rich set of built-in data types and formatting tools, like f-strings, that enhance code readability and efficiency.
 
 ---
 
+Feel free to contribute or add more examples!
 
