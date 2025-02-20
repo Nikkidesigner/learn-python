@@ -715,6 +715,202 @@ print(g)             # Output: '(1, 2, 3, 4, 5)'
 
 Python's type casting feature allows for the conversion of one data type to another using built-in functions. Understanding how to use implicit and explicit casting effectively can enhance your programming skills and improve the flexibility of your code. Whether you're converting numbers, strings, or sequences, Python provides the tools necessary to handle data types efficiently.
 
+
+# **Concept of Local and Global Variables in Python**
+In Python, **variables** can be classified into two main types based on their **scope**:
+
+1. **Global Variables**:  
+   - Declared outside a function or block.
+   - Can be accessed inside and outside functions.
+   - Can be modified inside functions using the `global` keyword.
+
+2. **Local Variables**:  
+   - Declared inside a function.
+   - Only accessible within that function.
+   - Created when the function is called and destroyed when the function ends.
+
+---
+
+## **Access Rules for Local and Global Variables**
+1. **A local variable is only accessible inside the function where it is defined.**
+2. **A global variable is accessible anywhere in the program unless shadowed by a local variable.**
+3. **A function can modify a global variable using the `global` keyword.**
+4. **A function can access (but not modify) a global variable without using `global`.**
+5. **Using the same name for a local and a global variable creates two separate variables (variable shadowing).**
+6. **Nested functions can access variables from their enclosing functions using `nonlocal`.**
+
+---
+
+## **10 Examples to Understand Local and Global Variables**
+
+### **1. Simple Example of a Global Variable**
+```python
+x = 10  # Global variable
+
+def display():
+    print(x)  # Accessing global variable
+
+display()  # Output: 10
+print(x)   # Output: 10
+```
+
+---
+
+### **2. Simple Example of a Local Variable**
+```python
+def example():
+    y = 20  # Local variable
+    print(y)  # Accessible inside function
+
+example()  # Output: 20
+# print(y)  # ❌ Error: NameError: 'y' is not defined (y is local)
+```
+
+---
+
+### **3. Local and Global Variable with the Same Name (Variable Shadowing)**
+```python
+a = 50  # Global variable
+
+def test():
+    a = 100  # Local variable (shadows global 'a')
+    print("Inside function:", a)
+
+test()  # Output: Inside function: 100
+print("Outside function:", a)  # Output: Outside function: 50
+```
+
+---
+
+### **4. Modifying a Global Variable Inside a Function Using `global`**
+```python
+b = 30  # Global variable
+
+def modify():
+    global b  # Declaring that we are modifying the global variable
+    b = 60
+    print("Inside function:", b)
+
+modify()  
+print("Outside function:", b)  # Output: 60 (global variable changed)
+```
+
+---
+
+### **5. Accessing a Global Variable Inside a Function Without `global`**
+```python
+c = 5  # Global variable
+
+def display():
+    print("Inside function:", c)  # Allowed (reading global variable)
+
+display()  # Output: Inside function: 5
+print("Outside function:", c)  # Output: Outside function: 5
+```
+
+---
+
+### **6. Trying to Modify a Global Variable Without `global` (Will Cause an Error)**
+```python
+d = 15  # Global variable
+
+def change():
+    d = d + 5  # ❌ UnboundLocalError (Python treats 'd' as a local variable here)
+    print(d)
+
+# change()  # Uncommenting this line will cause an error
+```
+✅ **Fix:** Use `global d` inside the function before modifying `d`.
+
+---
+
+### **7. Using `nonlocal` to Modify a Variable in an Enclosing Function**
+```python
+def outer():
+    e = 10  # Enclosing function variable
+    
+    def inner():
+        nonlocal e  # Modify the 'e' from outer function
+        e += 5
+        print("Inside inner function:", e)
+
+    inner()
+    print("Inside outer function:", e)
+
+outer()
+# Output:
+# Inside inner function: 15
+# Inside outer function: 15
+```
+
+---
+
+### **8. Global and Local Variables in Nested Functions**
+```python
+f = 100  # Global variable
+
+def outer():
+    f = 200  # Local variable in 'outer'
+    
+    def inner():
+        f = 300  # Local variable in 'inner'
+        print("Inner function:", f)  # 300
+
+    inner()
+    print("Outer function:", f)  # 200
+
+outer()
+print("Global scope:", f)  # 100
+```
+
+---
+
+### **9. Using `global` Inside a Nested Function**
+```python
+g = "Hello"  # Global variable
+
+def outer():
+    global g  # Now we are modifying the global 'g'
+    g = "Hi"
+
+outer()
+print(g)  # Output: Hi
+```
+
+---
+
+### **10. Function Using Both Global and Local Variables**
+```python
+h = 500  # Global variable
+
+def mixed():
+    global h
+    h = h + 100  # Modifying global variable
+    local_var = 300  # Local variable
+    print("Inside function:", h, local_var)
+
+mixed()  # Output: Inside function: 600 300
+print("Outside function:", h)  # Output: 600
+# print(local_var)  # ❌ NameError: 'local_var' is not defined (it's local)
+```
+
+---
+
+## **Summary**
+| Concept | Description |
+|---------|-------------|
+| **Global Variable** | Declared outside functions, accessible everywhere. |
+| **Local Variable** | Declared inside a function, only accessible within that function. |
+| **Variable Shadowing** | A local variable with the same name as a global variable hides the global one. |
+| **`global` Keyword** | Used inside a function to modify a global variable. |
+| **`nonlocal` Keyword** | Used to modify a variable from an enclosing function. |
+| **Access Rule 1** | Global variables can be accessed inside functions (unless shadowed). |
+| **Access Rule 2** | Local variables cannot be accessed outside their function. |
+| **Access Rule 3** | Modifying a global variable inside a function requires `global`. |
+| **Access Rule 4** | `nonlocal` allows modifying variables in an outer function (not global). |
+
+
+
 # What is the Unicode System?
 
 In today's globalized world, software applications often need to display messages and outputs in a variety of languages, including but not limited to English, French, Japanese, Hebrew, and Hindi. To facilitate this, Python's string type utilizes the Unicode Standard for representing characters, enabling programs to work seamlessly with a diverse range of characters.
