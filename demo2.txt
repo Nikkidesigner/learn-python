@@ -1,0 +1,3 @@
+this is anotehr file which can be read by the read function
+instead of hardcoding the filenames we can use the argv to dynamically select the file so that we can read the contents from the file 
+the motive here is to save the time by entering the filename directly into the program.

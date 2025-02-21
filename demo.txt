@@ -1,0 +1,5 @@
+hello this is the program of reading file into our python code.
+We have used the open and read function to read the contents from a file 
+in order to open the file into the code we are using the open function 
+and for reading the contents of teh file we are using the read function which reads the object 
+contents where we have stored the text file contents.
