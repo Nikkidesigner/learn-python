@@ -3058,6 +3058,750 @@ This script demonstrates how Python handles text encoding and decoding, which is
 For further reading, refer to the [Python Documentation on Encodings](https://docs.python.org/3/library/codecs.html).
 
 
+# Python Lists
+
+## Introduction
+A **list** in Python is a built-in data structure that stores an ordered collection of items. It is similar to an array in C, C++, or Java but with a major advantage—lists can hold elements of different data types.
+
+Python’s simplest sequence data structure is the list, which is an ordered list of things. You can access
+the elements of a list randomly, in order, extend it, shrink it, and do most anything else you could do
+to a sequence of things in real life.
+
+
+A Python list is mutable. Any item from the list can be accessed using its index, and can be modified. One or more objects from the list can be removed or added. A list may have same item at more than one index positions.
+
+
+
+Lists are defined using **square brackets `[ ]`**, and items are separated by commas.
+
+### **Examples of Lists**:
+```python
+list1 = ["Rohan", "Physics", 21, 69.75]
+list2 = [1, 2, 3, 4, 5]
+list3 = ["a", "b", "c", "d"]
+list4 = [25.50, True, -55, 1+2j]
+```
+
+## **Features of Lists**:
+- Ordered collection of elements.
+- Mutable (modifiable).
+- Can contain mixed data types.
+- Supports indexing and slicing.
+
+---
+
+## **Accessing Values in Lists**
+You can access list elements using their index (starting from `0`).
+
+### **Example:**
+```python
+list1 = ['physics', 'chemistry', 1997, 2000]
+list2 = [1, 2, 3, 4, 5, 6, 7]
+
+print("list1[0]:", list1[0])  # Accessing first element
+print("list2[1:5]:", list2[1:5])  # Accessing elements from index 1 to 4
+```
+
+### **Output:**
+```
+list1[0]: physics
+list2[1:5]: [2, 3, 4, 5]
+```
+
+---
+
+## **Updating Lists**
+Lists are mutable, meaning elements can be updated or modified.
+
+### **Example:**
+```python
+list1 = ['physics', 'chemistry', 1997, 2000]
+print("Value at index 2:", list1[2])
+
+list1[2] = 2001  # Updating an element
+print("Updated value at index 2:", list1[2])
+```
+
+### **Output:**
+```
+Value at index 2: 1997
+Updated value at index 2: 2001
+```
+
+---
+
+## **Deleting List Elements**
+You can remove elements using the `del` statement or the `remove()` method.
+
+### **Example:**
+```python
+list1 = ['physics', 'chemistry', 1997, 2000]
+print("Before deletion:", list1)
+
+del list1[2]  # Removing element at index 2
+print("After deletion:", list1)
+```
+
+### **Output:**
+```
+Before deletion: ['physics', 'chemistry', 1997, 2000]
+After deletion: ['physics', 'chemistry', 2000]
+```
+
+---
+
+## **Python List Operations**
+| Expression | Result | Description |
+|------------|---------|-------------|
+| `[1, 2, 3] + [4, 5, 6]` | `[1, 2, 3, 4, 5, 6]` | List concatenation |
+| `['Hi!'] * 4` | `['Hi!', 'Hi!', 'Hi!', 'Hi!']` | List repetition |
+| `3 in [1, 2, 3]` | `True` | Membership test |
+
+---
+
+## **Indexing, Slicing, and Matrices**
+Lists support indexing and slicing like strings.
+
+### **Example:**
+```python
+L = ['spam', 'Spam', 'SPAM!']
+print(L[2])   # Accessing third element
+print(L[-2])  # Accessing second last element
+print(L[1:])  # Slicing from index 1 to end
+```
+
+### **Output:**
+```
+SPAM!
+Spam
+['Spam', 'SPAM!']
+```
+
+---
+
+## **Python List Methods**
+Python provides many built-in methods to manipulate lists.
+
+| Method | Description |
+|--------|-------------|
+| `list.append(obj)` | Appends `obj` to the list. |
+| `list.clear()` | Removes all elements from the list. |
+| `list.copy()` | Returns a shallow copy of the list. |
+| `list.count(obj)` | Counts occurrences of `obj` in the list. |
+| `list.extend(seq)` | Extends list by appending elements from `seq`. |
+| `list.index(obj)` | Returns the first index of `obj`. |
+| `list.insert(index, obj)` | Inserts `obj` at the specified `index`. |
+| `list.pop([index])` | Removes and returns item at `index`. Default is last item. |
+| `list.remove(obj)` | Removes the first occurrence of `obj`. |
+| `list.reverse()` | Reverses the list in place. |
+| `list.sort()` | Sorts the list. |
+
+### **Examples of List Methods:**
+```python
+numbers = [10, 20, 30, 40]
+numbers.append(50)  # Adds 50 to the list
+numbers.remove(20)  # Removes the first occurrence of 20
+numbers.insert(1, 15)  # Inserts 15 at index 1
+numbers.reverse()  # Reverses the list
+print(numbers)
+```
+
+### **Output:**
+```
+[50, 40, 30, 15, 10]
+```
+
+---
+
+## **Built-in Functions with Lists**
+Python also provides built-in functions that can be used with lists.
+
+| Function | Description |
+|----------|-------------|
+| `len(list)` | Returns the length of the list. |
+| `max(list)` | Returns the maximum element. |
+| `min(list)` | Returns the minimum element. |
+| `list(seq)` | Converts a sequence to a list. |
+
+### **Example:**
+```python
+num_list = [5, 10, 15, 20]
+print("Length:", len(num_list))
+print("Max value:", max(num_list))
+print("Min value:", min(num_list))
+```
+
+### **Output:**
+```
+Length: 4
+Max value: 20
+Min value: 5
+```
+
+---
+
+## **Conclusion**
+- Lists are versatile and widely used in Python.
+- They can store mixed data types.
+- Lists are mutable and support many operations and methods.
+- Understanding lists is essential for efficient Python programming.
+
+---
+
+Feel free to experiment with these examples to gain a deeper understanding! 🚀
+
+
+
+
+# Python Dictionaries
+
+## Introduction
+A **dictionary** in Python is a built-in data structure that stores data in **key-value** pairs. It is an **unordered**, **mutable**, and **indexed** collection where each key is unique and maps to a specific value.
+
+Dictionaries are commonly used when data needs to be stored in a structured format, allowing for quick lookups.
+
+### **Example of Python Dictionaries:**
+```python
+capitals = {"Maharashtra": "Mumbai", "Gujarat": "Gandhinagar", "Telangana": "Hyderabad"}
+numbers = {10: "Ten", 20: "Twenty", 30: "Thirty"}
+marks = {"Savita": 67, "Imtiaz": 88, "Laxman": 91}
+```
+
+---
+
+## **Key Features of Dictionaries**
+- **Unordered** – Items have no specific order (in Python 3.7+, they maintain insertion order).
+- **Mutable** – Can be modified after creation.
+- **Indexed** – Access elements using keys instead of numerical indexes.
+- **Unique Keys** – Keys must be unique; assigning a new value to an existing key replaces the old value.
+- **Heterogeneous** – Keys and values can be of any data type.
+
+---
+
+## **Creating a Dictionary**
+You can create a dictionary using **curly braces `{}`** or the `dict()` function.
+
+### **Example:**
+```python
+# Using curly braces
+sports_player = {"Name": "Sachin Tendulkar", "Age": 48, "Sport": "Cricket"}
+print("Dictionary using curly braces:", sports_player)
+
+# Using dict() function
+student_info = dict(name="Alice", age=21, major="Computer Science")
+print("Dictionary using dict():", student_info)
+```
+
+### **Output:**
+```
+Dictionary using curly braces: {'Name': 'Sachin Tendulkar', 'Age': 48, 'Sport': 'Cricket'}
+Dictionary using dict(): {'name': 'Alice', 'age': 21, 'major': 'Computer Science'}
+```
+
+---
+
+## **Accessing Dictionary Items**
+Use **square brackets `[ ]`** or the **`get()` method** to access values.
+
+### **Example:**
+```python
+student_info = {"name": "Alice", "age": 21, "major": "Computer Science"}
+
+# Accessing values using square brackets
+name = student_info["name"]
+print("Name:", name)
+
+# Accessing values using get() method
+age = student_info.get("age")
+print("Age:", age)
+```
+
+### **Output:**
+```
+Name: Alice
+Age: 21
+```
+
+---
+
+## **Modifying Dictionary Items**
+You can **update** values or **add** new key-value pairs.
+
+### **Example:**
+```python
+student_info["age"] = 22  # Modifying an existing key-value pair
+student_info["graduation_year"] = 2023  # Adding a new key-value pair
+print("Modified dictionary:", student_info)
+```
+
+### **Output:**
+```
+Modified dictionary: {'name': 'Alice', 'age': 22, 'major': 'Computer Science', 'graduation_year': 2023}
+```
+
+---
+
+## **Removing Dictionary Items**
+Use the `del` statement, `pop()`, or `popitem()` to remove elements.
+
+### **Example:**
+```python
+# Using del statement
+del student_info["major"]
+
+# Using pop()
+graduation_year = student_info.pop("graduation_year")
+print(student_info)
+```
+
+### **Output:**
+```
+{'name': 'Alice', 'age': 22}
+```
+
+---
+
+## **Iterating Through a Dictionary**
+You can loop through keys, values, or key-value pairs using loops.
+
+### **Example:**
+```python
+student_info = {"name": "Alice", "age": 22, "major": "Computer Science"}
+
+# Iterating through keys
+for key in student_info:
+    print("Key:", key, "Value:", student_info[key])
+
+# Iterating through values
+for value in student_info.values():
+    print("Value:", value)
+
+# Iterating through key-value pairs
+for key, value in student_info.items():
+    print("Key:Value:", key, value)
+```
+
+---
+
+## **Dictionary Methods with Examples**
+| Method | Description | Example |
+|--------|-------------|---------|
+| `dict.clear()` | Removes all elements | `student_info.clear()` |
+| `dict.copy()` | Returns a shallow copy | `copy_dict = student_info.copy()` |
+| `dict.fromkeys(seq, value)` | Creates dictionary with keys from `seq` | `new_dict = dict.fromkeys(["a", "b", "c"], 0)` |
+| `dict.get(key, default)` | Returns value for key or default | `age = student_info.get("age", 0)` |
+| `dict.items()` | Returns a view of key-value pairs | `print(student_info.items())` |
+| `dict.keys()` | Returns a view of keys | `print(student_info.keys())` |
+| `dict.pop(key)` | Removes and returns the value of key | `student_info.pop("age")` |
+| `dict.update(dict2)` | Updates the dictionary with another dictionary | `student_info.update({"GPA": 3.8})` |
+| `dict.values()` | Returns a view of values | `print(student_info.values())` |
+
+### **Example Usage:**
+```python
+# Using some dictionary methods
+student_info = {"name": "Alice", "age": 22, "major": "Computer Science"}
+print(student_info.keys())  # Output: dict_keys(['name', 'age', 'major'])
+print(student_info.values())  # Output: dict_values(['Alice', 22, 'Computer Science'])
+
+# Using update method
+student_info.update({"GPA": 3.8})
+print(student_info)
+```
+
+### **Output:**
+```
+dict_keys(['name', 'age', 'major'])
+dict_values(['Alice', 22, 'Computer Science'])
+{'name': 'Alice', 'age': 22, 'major': 'Computer Science', 'GPA': 3.8}
+```
+
+---
+
+## **Built-in Functions with Dictionaries**
+| Function | Description | Example |
+|----------|-------------|---------|
+| `len(dict)` | Returns the number of items | `print(len(student_info))` |
+| `str(dict)` | Returns a string representation | `print(str(student_info))` |
+| `type(variable)` | Returns the type of variable | `print(type(student_info))` |
+
+---
+
+## **Conclusion**
+- Dictionaries store key-value pairs for fast lookups.
+- They are mutable, unordered, and flexible.
+- Python provides many useful methods for working with dictionaries.
+- Understanding dictionaries is essential for Python programming.
+
+---
+
+Start experimenting with dictionaries and explore their powerful capabilities! 🚀
+
+
+
+
+
+#  Dictionaries and Modules
+
+## Introduction
+In this exercise, we will explore Python’s **`__dict__` attribute**, which is a special dictionary used to store all attributes of objects, including **modules, classes, and instances**. Understanding `__dict__` helps in:
+
+  1. **Inspecting and manipulating objects dynamically.**
+  2. **Understanding how Python stores attributes internally.**
+  3. **Exploring module-level variables and metadata.**
+
+---
+
+## **Step 1: Reviewing `import` and Modules**
+A module in Python is simply a file containing Python definitions and statements. When you import a module, Python loads its contents into memory and allows access to its attributes.
+
+### **Example:** `ex26.py`
+```python
+name = "Zed"
+height = 74
+```
+
+Now create another file and import `ex26.py`:
+
+### **Example:** `ex26_code.py`
+```python
+import ex26
+
+print("Name:", ex26.name)
+print("Height:", ex26.height)
+```
+
+### **Output:**
+```
+Name: Zed
+Height: 74
+```
+
+This demonstrates how importing a module makes its attributes accessible.
+
+---
+
+## **Step 2: Understanding `__dict__`**
+Every Python module, class, or object has an internal dictionary (`__dict__`) that stores its attributes.
+
+### **Example:**
+```python
+from pprint import pprint
+pprint(ex26.__dict__)
+```
+
+### **Sample Output:**
+```
+{'__builtins__': <module 'builtins' ...>,
+ '__cached__': None,
+ '__doc__': None,
+ '__file__': 'ex26.py',
+ '__loader__': ...,
+ '__name__': 'ex26',
+ '__package__': None,
+ '__spec__': None,
+ 'height': 74,
+ 'name': 'Zed'}
+```
+
+The `__dict__` attribute contains all module variables and built-in metadata.
+
+---
+
+## **Step 3: Accessing Variables Using `__dict__`**
+Since modules use `__dict__` internally, we can retrieve variables using dictionary syntax.
+
+### **Example:**
+```python
+print("Height:", ex26.height)
+print("Height via __dict__:", ex26.__dict__['height'])
+```
+
+### **Output:**
+```
+Height: 74
+Height via __dict__: 74
+```
+
+Both methods return the same result.
+
+---
+
+## **Step 4: Modifying `__dict__`**
+Since `__dict__` acts as a dictionary, modifying it updates the module’s attributes dynamically.
+
+### **Example:**
+```python
+print(f"Initially: {ex26.height} inches tall.")
+
+ex26.__dict__['height'] = 1000
+print(f"Updated: {ex26.height} inches tall.")
+
+ex26.height = 12
+print(f"Modified again: {ex26.__dict__['height']} inches tall.")
+```
+
+### **Output:**
+```
+Initially: 74 inches tall.
+Updated: 1000 inches tall.
+Modified again: 12 inches tall.
+```
+
+This proves that updating `__dict__` directly affects module variables.
+
+---
+
+## **Step 5: Exploring `__dict__` in Other Objects**
+The `__dict__` attribute is **not just for modules**—it also exists for classes and instances.
+
+### **Example (Using Classes):**
+```python
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+person1 = Person("Alice", 25)
+print(person1.__dict__)  # Inspecting the instance dictionary
+```
+
+### **Output:**
+```
+{'name': 'Alice', 'age': 25}
+```
+
+This shows that instance variables are stored in `__dict__`.
+
+---
+
+## **Step 6: Exploring Other Dunder Variables**
+Python provides many other special (dunder) variables. You can explore them using `help()` and `__doc__`.
+
+### **Example:**
+```python
+from pprint import pprint
+
+print(pprint.__doc__)  # Prints the documentation for pprint
+help(pprint)  # Displays detailed help information
+```
+
+### **Output:**
+```
+pprint(object, *args, sort_dicts=True, **kwargs)
+    Pretty-print a Python object to a stream [...]
+```
+
+Try accessing `__doc__`, `__name__`, `__file__`, and `__package__` in different objects.
+
+---
+
+## **Why Use `__dict__`?**
+- **Introspection:** Helps debug and inspect objects dynamically.
+- **Dynamic Attribute Assignment:** Modify objects on the fly.
+- **Serialization:** Convert objects into JSON-friendly dictionaries.
+- **Meta-programming:** Used in frameworks and advanced Python techniques.
+
+### **Example (Dynamic Attributes):**
+```python
+class Car:
+    pass
+
+car1 = Car()
+car1.__dict__["color"] = "red"
+print(car1.color)  # Accessing dynamically assigned attribute
+```
+
+### **Output:**
+```
+red
+```
+
+---
+
+## **Summary**
+- `__dict__` is a built-in dictionary storing object attributes.
+- Modules, classes, and instances use `__dict__` for storing variables dynamically.
+- You can manipulate `__dict__` to modify objects at runtime.
+- Other dunder variables (`__doc__`, `__name__`, `__file__`) provide metadata about objects.
+
+---
+
+### **Next Steps**
+- Experiment with modifying `__dict__` in different modules and classes.
+- Explore additional dunder variables using `dir()`.
+- Try building a dynamic object system using `__dict__`.
+
+Happy Coding! 🚀
+
+# The Five Simple Rules to the Game of Code
+
+## Introduction
+Programming, like games such as Chess or Go, follows a set of simple rules that enable complex interactions. These rules are fundamental to understanding how code works at a deeper level. While you may not use these rules directly in daily coding, knowing them will help you debug, optimize, and truly understand the inner workings of your programs.
+
+---
+
+## **Rule 1: Everything Is a Sequence of Instructions**
+All programs consist of a sequence of instructions that tell the computer what to do. Python executes statements in order, converting them into low-level bytecode instructions.
+
+### **Example:**
+```python
+x = 10
+y = 20
+z = x + y
+```
+
+Internally, Python translates this into bytecode:
+```plaintext
+LOAD_CONST 0 (10)  # Load 10
+STORE_NAME 0 (x)   # Store in x
+LOAD_CONST 1 (20)  # Load 20
+STORE_NAME 1 (y)   # Store in y
+LOAD_NAME 0 (x)    # Load x (10)
+LOAD_NAME 1 (y)    # Load y (20)
+BINARY_ADD         # Add x and y
+STORE_NAME 2 (z)   # Store result in z
+```
+Each Python instruction is broken down into basic operations that the computer executes sequentially.
+
+---
+
+## **How to View Bytecode**
+You can view the bytecode of any Python script using the `dis` module.
+
+### **Example:**
+```python
+from dis import dis
+
+dis('''
+x = 10
+y = 20
+z = x + y
+''')
+```
+This will output a bytecode representation of the given Python code.
+
+---
+
+## **Rule 2: Jumps Make the Sequence Non-Linear**
+In addition to executing instructions sequentially, programs can **jump** to different parts of the code, making execution non-linear. The `while` loop is an example of this:
+
+### **Example:**
+```python
+while True:
+    x = 10
+```
+Disassembling this code reveals a jump instruction:
+```plaintext
+LOAD_CONST 1 (10)
+STORE_NAME 0 (x)
+JUMP_ABSOLUTE 0  # Jump back to instruction at index 0
+```
+The `JUMP_ABSOLUTE` instruction tells Python to return to the beginning of the loop, creating an infinite cycle.
+
+---
+
+## **Rule 3: Conditions Control the Jumps**
+Programs make decisions using conditions (`if` statements, `while` loops). These conditions are translated into **jump instructions** that determine execution flow.
+
+### **Example:**
+```python
+x = 10
+if x > 5:
+    print("x is greater than 5")
+```
+
+Disassembling this:
+```plaintext
+LOAD_NAME 0 (x)
+LOAD_CONST 1 (5)
+COMPARE_OP 4 (> 5)
+POP_JUMP_IF_FALSE 10  # Skip print if condition is False
+LOAD_GLOBAL 0 (print)
+CALL_FUNCTION 1
+```
+The instruction `POP_JUMP_IF_FALSE` ensures the `print` function only executes if `x > 5`.
+
+---
+
+## **Rule 4: Functions Allow Code Reuse**
+Functions encapsulate code and create **reusable** sequences of instructions.
+
+### **Example:**
+```python
+def add(a, b):
+    return a + b
+
+result = add(5, 10)
+```
+
+Bytecode reveals function calls involve `CALL_FUNCTION` and `RETURN_VALUE` instructions:
+```plaintext
+LOAD_NAME 0 (add)
+LOAD_CONST 1 (5)
+LOAD_CONST 2 (10)
+CALL_FUNCTION 2  # Call add with two arguments
+STORE_NAME 1 (result)
+```
+Functions allow efficient code organization and modular programming.
+
+---
+
+## **Rule 5: Everything Reduces to Data Manipulation**
+Ultimately, programming boils down to **loading, storing, modifying, and moving data**. Whether using variables, loops, or functions, every program is a series of operations on data.
+
+### **Example:**
+```python
+numbers = [1, 2, 3]
+numbers.append(4)
+print(numbers)
+```
+Bytecode shows the underlying operations:
+```plaintext
+LOAD_NAME 0 (numbers)
+LOAD_METHOD 1 (append)
+LOAD_CONST 2 (4)
+CALL_METHOD 1
+```
+Here, Python loads the list, fetches the `append` method, calls it, and modifies the list.
+
+---
+
+## **Where Bytecode is Stored**
+Python compiles scripts into **.pyc files** inside the `__pycache__` directory. These files store precompiled bytecode, allowing faster execution.
+
+To see compiled bytecode:
+1. Create a Python script (e.g., `ex27.py`).
+2. Run it using `python ex27.py`.
+3. Check the `__pycache__` directory for the compiled `.pyc` file.
+
+---
+
+## **Summary**
+- **All code is translated into a sequence of bytecode instructions.**
+- **Jumps allow non-linear execution (loops, conditionals).**
+- **Conditionals control jumps, making decisions in code.**
+- **Functions enable code reuse and organization.**
+- **All programming reduces to data manipulation.**
+
+---
+
+## **Next Steps**
+- Experiment with `dis()` to analyze different Python structures.
+- Explore the `__pycache__` directory to see compiled bytecode.
+- Use `help()` and `dir()` to explore Python’s internals.
+
+Understanding these fundamentals will help you become a better programmer! 🚀
+
+
+
+
+
+
+
+
+
+
+
 
 
 
