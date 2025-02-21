@@ -2832,9 +2832,234 @@ print(y)  # Error: y is not defined
 
 ## **Conclusion**
 
-Functions are a fundamental concept in Python programming. By mastering functions, you can write modular, reusable, and efficient code. Practice the examples and problems provided in this README to strengthen your understanding of Python functions.
+Functions are a fundamental concept in Python programming. By mastering functions, you can write modular, reusable, and efficient code. 
 
-Happy coding! 🚀
+
+
+
+
+# **Encoding and Decoding Text in Python**
+
+How we **encode** and **decode** text using different character encodings ? The script reads a file containing a list of human languages, encodes each line into bytes, and then decodes it back into a string. It also explains key concepts like `encode()`, `decode()`, `sys.argv`, and `strip()`.
+
+To do this exercise you’ll need to download a text file that I’ve written named languages.txt. 
+
+
+### Download the file : <a href = "https://learnpythonthehardway.org/python3/languages.txt">languages.txt </a>
+
+
+This file was created with a list of human languages to demonstrate a few interesting concepts:
+- How modern computers store human languages for display and processing and how Python3 calls these strings
+- How you must “encode” and “decode” Python’s strings into a type called bytes
+- How to handle errors in your string and byte handling
+- How to read code and find out what it means even if you’ve never seen it before
+
+---
+
+## **Table of Contents**
+
+1. [Key Concepts](#key-concepts)
+   - [Encoding and Decoding](#encoding-and-decoding)
+   - [Command-Line Arguments (`sys.argv`)](#command-line-arguments-sysargv)
+   - [The `strip()` Function](#the-strip-function)
+2. [Script Explanation](#script-explanation)
+   - [Importing `sys`](#1-importing-sys)
+   - [Unpacking Command-Line Arguments](#2-unpacking-command-line-arguments)
+   - [The `main` Function](#3-the-main-function)
+   - [The `print_line` Function](#4-the-print_line-function)
+   - [Opening the File](#5-opening-the-file)
+   - [Calling the `main` Function](#6-calling-the-main-function)
+3. [Example Input and Output](#example-input-and-output)
+4. [Real-world Use Cases](#real-world-use-cases)
+5. [Practice Problems](#practice-problems)
+
+---
+
+## **1. Key Concepts**
+
+### **Encoding and Decoding**
+
+- **Encoding**:
+  - Converts a string (human-readable text) into a sequence of bytes (binary data).
+  - Example: `"Hello".encode("utf-8")` produces `b'Hello'`.
+  - Common encodings: `utf-8`, `ascii`, `latin-1`.
+
+- **Decoding**:
+  - Converts bytes back into a string.
+  - Example: `b'Hello'.decode("utf-8")` produces `"Hello"`.
+  ### Working of the Python Decode() Method 
+- The following flowchart shows the working of Python decoding:
+<img src="https://github.com/user-attachments/assets/9e328e8a-ae87-4914-becd-8becdeb5afdc" height = "400" width="400" />
+
+
+- **Why Encoding/Decoding is Important**:
+  - Computers store and transmit data as bytes.
+  - Different systems use different encodings, so proper encoding/decoding ensures text is displayed correctly.
+
+---
+
+### **Command-Line Arguments (`sys.argv`)**
+
+- `sys.argv` is a list in Python that contains the command-line arguments passed to the script.
+- The first element (`sys.argv[0]`) is the script name.
+- Subsequent elements are the arguments provided by the user.
+- Example:
+  ```bash
+  python script.py utf-8 strict
+  ```
+  - `sys.argv[0]`: `script.py`
+  - `sys.argv[1]`: `utf-8`
+  - `sys.argv[2]`: `strict`
+
+---
+
+### **The `strip()` Function**
+
+- Removes leading and trailing whitespace (spaces, tabs, newlines) from a string.
+- Example:
+  ```python
+  text = "  Hello, World!  \n"
+  stripped_text = text.strip()  # "Hello, World!"
+  ```
+
+---
+
+## **2. Script Explanation**
+
+### **1. Importing `sys`**
+```python
+import sys
+```
+- Imports the `sys` module to access command-line arguments.
+
+---
+
+### **2. Unpacking Command-Line Arguments**
+```python
+script, input_encoding, error = sys.argv
+```
+- Unpacks the command-line arguments into three variables:
+  - `script`: The name of the script.
+  - `input_encoding`: The encoding scheme (e.g., `utf-8`).
+  - `error`: The error handling scheme (e.g., `strict`, `ignore`, `replace`).
+
+---
+
+### **3. The `main` Function**
+```python
+def main(language_file, encoding, errors):
+    line = language_file.readline()
+    if line:
+        print_line(line, encoding, errors)
+        return main(language_file, encoding, errors)
+```
+- **Purpose**: Reads the file line by line and processes each line.
+- **Parameters**:
+  - `language_file`: The file object containing the list of languages.
+  - `encoding`: The encoding scheme to use.
+  - `errors`: The error handling scheme.
+- **Workflow**:
+  1. Reads a line from the file using `readline()`.
+  2. If the line is not empty, calls `print_line()` to process it.
+  3. Recursively calls itself to process the next line.
+
+---
+
+### **4. The `print_line` Function**
+```python
+def print_line(line, encoding, errors):
+    next_lang = line.strip()
+    raw_bytes = next_lang.encode(encoding, errors=errors)
+    cooked_string = raw_bytes.decode(encoding, errors=errors)
+    print(raw_bytes, "<===>", cooked_string)
+```
+- **Purpose**: Processes a single line from the file.
+- **Parameters**:
+  - `line`: The line of text to process.
+  - `encoding`: The encoding scheme to use.
+  - `errors`: The error handling scheme.
+- **Workflow**:
+  1. Removes whitespace from the line using `strip()`.
+  2. Encodes the string into bytes using `encode()`.
+  3. Decodes the bytes back into a string using `decode()`.
+  4. Prints the raw bytes and the decoded string for comparison.
+
+---
+
+### **5. Opening the File**
+```python
+languages = open("languages.txt", encoding="utf-8")
+```
+- Opens the file `languages.txt` in read mode with `utf-8` encoding.
+- The file contains a list of human languages, one per line.
+
+---
+
+### **6. Calling the `main` Function**
+```python
+main(languages, input_encoding, error)
+```
+- Calls the `main` function with the file object, encoding, and error handling scheme as arguments.
+- Starts the process of reading and processing the file.
+
+---
+
+## **3. Example Input and Output**
+
+### **Input File (`languages.txt`)**
+```
+English
+Français
+Español
+日本語
+```
+
+### **Command to Run the Script**
+```bash
+python script.py utf-8 strict
+```
+
+### **Output**
+```
+b'English' <===> English
+b'Fran\xc3\xa7ais' <===> Français
+b'Espa\xc3\xb1ol' <===> Español
+b'\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e' <===> 日本語
+```
+
+---
+
+## **4. Real-world Use Cases**
+
+1. **Text Processing**:
+   - Encoding and decoding are essential when working with text files, databases, or APIs that use different character encodings.
+
+2. **Data Transmission**:
+   - Bytes are used for transmitting data over networks (e.g., HTTP requests, emails).
+
+3. **Localization**:
+   - Handling multiple languages and character sets in applications.
+
+---
+
+## **5. Practice Problems**
+
+1. Modify the script to handle a different encoding (e.g., `ascii`) and observe the output.
+2. Change the error handling scheme to `ignore` or `replace` and see how it affects the output.
+3. Add a counter to display the line number along with the encoded and decoded text.
+4. Write a script that writes encoded bytes to a file and then reads and decodes them.
+
+---
+
+## **Conclusion**
+
+This script demonstrates how Python handles text encoding and decoding, which is crucial for working with multilingual data. By understanding these concepts, you can build applications that process and display text correctly across different systems and languages.
+
+For further reading, refer to the [Python Documentation on Encodings](https://docs.python.org/3/library/codecs.html).
+
+
+
+
 
 
 
