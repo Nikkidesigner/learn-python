@@ -4534,10 +4534,1753 @@ Closures are a powerful concept—master them, and you’ll write more flexible 
 
 
 
+# Object-Oriented Programming (OOP) in Python
+
+## **Introduction**
+Object-Oriented Programming (OOP) is a programming paradigm that uses **objects** to represent real-world entities. Python fully supports OOP, making it easy to create and manage **classes, objects, inheritance, and polymorphism**.
+
+This chapter covers:
+- **Procedural vs. Object-Oriented Programming**
+- **Core principles of OOP: Classes, Objects, Encapsulation, Inheritance, and Polymorphism**
+- **Method Overloading and Operator Overloading**
+
+---
+
+## **1. Procedural vs. Object-Oriented Programming**
+### **Procedural Approach:**
+- Code is organized into **functions**.
+- Focuses on **procedures** (step-by-step execution).
+- Uses **global variables**, which can lead to maintenance issues.
+- Example:
+```python
+def add_numbers(a, b):
+    return a + b
+print(add_numbers(5, 10))  # Output: 15
+```
+
+### **Object-Oriented Approach:**
+- Code is organized into **classes and objects**.
+- Focuses on **data and behaviors** together.
+- Reduces redundancy using **inheritance**.
+- Example:
+```python
+class Calculator:
+    def add(self, a, b):
+        return a + b
+calc = Calculator()
+print(calc.add(5, 10))  # Output: 15
+```
+
+---
+
+## **2. Classes and Objects in Python**
+A **class** is a blueprint for creating objects. An **object** is an instance of a class with its own attributes and behaviors.
+
+### **Example: Creating a Class and Object**
+```python
+class Smartphone:
+    def __init__(self, brand, model):
+        self.brand = brand  # Attribute
+        self.model = model  # Attribute
+
+    def description(self):  # Method
+        return f"{self.brand} {self.model} supports Android."
+
+# Creating an object of the class
+phone = Smartphone("Samsung", "Galaxy S21")
+print(phone.description())  # Output: Samsung Galaxy S21 supports Android.
+```
+
+### **Breakdown:**
+- `__init__`: A special method (constructor) that initializes attributes.
+- `self`: Refers to the current object instance.
+- `brand` and `model`: Instance variables that store object data.
+- `description()`: A method that defines object behavior.
+
+---
+
+
+.
+
+---
+
+## **What is `self` in Python Classes?**
+- `self` is a **reference to the current instance of the class**.
+- It is used to **access instance variables and methods** inside the class.
+- When an object is created, `self` allows that object to store and manipulate its own data.
+
+---
+
+## **How `self` Works Internally?**
+Think of a class as a **blueprint**, and `self` as a way to keep track of each **individual object** created from that blueprint.
+
+### **Example 1: Understanding `self` in Action**
+```python
+class Car:
+    def __init__(self, brand, model):
+        self.brand = brand  # Assigning instance variable using self
+        self.model = model
+
+    def show_details(self):
+        print(f"Car Brand: {self.brand}, Model: {self.model}")
+
+# Creating two objects
+car1 = Car("Toyota", "Camry")
+car2 = Car("Honda", "Civic")
+
+# Calling the method
+car1.show_details()  # Output: Car Brand: Toyota, Model: Camry
+car2.show_details()  # Output: Car Brand: Honda, Model: Civic
+```
+
+### **How Does `self` Work Here?**
+1. When `car1` is created, `self.brand = "Toyota"` and `self.model = "Camry"`.
+2. When `car2` is created, `self.brand = "Honda"` and `self.model = "Civic"`.
+3. When `car1.show_details()` is called:
+   - `self.brand` refers to `"Toyota"`, and `self.model` refers to `"Camry"`.
+4. When `car2.show_details()` is called:
+   - `self.brand` refers to `"Honda"`, and `self.model` refers to `"Civic"`.
+
+🔹 **Key takeaway:** `self` ensures that each object maintains its own unique data.
+
+---
+
+## **Example 2: What Happens if We Remove `self`?**
+Let’s try removing `self` and see what happens:
+
+```python
+class Car:
+    def __init__(brand, model):  # ❌ Wrong! Missing self
+        brand.model = model  # ❌ Wrong! 'brand' is not a reference to the object
+
+car1 = Car("Toyota", "Camry")  # ❌ Error!
+```
+❌ This will result in an **error**, because Python does not automatically pass the object reference without `self`.
+
+✅ Corrected version:
+```python
+class Car:
+    def __init__(self, brand, model):
+        self.brand = brand
+        self.model = model
+```
+Now, `self` properly stores attributes in the object.
+
+---
+
+## **Example 3: Using `self` in Multiple Methods**
+The `self` keyword is also used when calling other methods inside a class.
+
+```python
+class Employee:
+    def __init__(self, name, salary):
+        self.name = name
+        self.salary = salary
+
+    def display_salary(self):
+        print(f"{self.name}'s salary is {self.salary}")
+
+    def increase_salary(self, amount):
+        self.salary += amount  # Updating instance variable
+        print(f"Salary updated! New salary: {self.salary}")
+
+# Creating an object
+emp1 = Employee("Alice", 50000)
+
+# Calling methods
+emp1.display_salary()  # Output: Alice's salary is 50000
+emp1.increase_salary(5000)  # Output: Salary updated! New salary: 55000
+```
+
+### **How `self` Works Here?**
+1. `self.name` and `self.salary` are used to store data **inside** the object.
+2. `self.salary += amount` modifies the **specific object's** salary.
+3. `self.display_salary()` is called on `emp1`, so it prints **Alice’s salary**.
+4. `self.increase_salary(5000)` updates Alice’s salary, but does **not** affect other objects.
+
+---
+
+## **Example 4: Using `self` to Differentiate Between Objects**
+```python
+class Student:
+    def __init__(self, name, marks):
+        self.name = name
+        self.marks = marks
+
+    def compare_marks(self, other_student):
+        if self.marks > other_student.marks:
+            print(f"{self.name} has higher marks than {other_student.name}.")
+        elif self.marks < other_student.marks:
+            print(f"{other_student.name} has higher marks than {self.name}.")
+        else:
+            print(f"Both {self.name} and {other_student.name} have equal marks.")
+
+# Creating two student objects
+student1 = Student("John", 85)
+student2 = Student("Emma", 90)
+
+# Comparing marks
+student1.compare_marks(student2)  # Output: Emma has higher marks than John.
+```
+
+### **How `self` Works Here?**
+- `self.marks` refers to the marks of **the object calling the method** (`student1`).
+- `other_student.marks` refers to the marks of **the other object passed as an argument** (`student2`).
+
+---
+
+## **When is `self` Automatically Passed?**
+### **Case 1: Inside a Class → `self` is Explicit**
+```python
+class Example:
+    def show(self):
+        print("Hello, self is required in class methods!")
+
+obj = Example()
+obj.show()  # ✅ Works, because we explicitly use self
+```
+
+### **Case 2: Outside the Class → `self` is Implicit**
+```python
+class Example:
+    def show(self):
+        print("Hello!")
+
+obj = Example()
+Example.show(obj)  # ✅ Equivalent to obj.show()
+```
+- `Example.show(obj)` is **manually passing** the object.
+- `obj.show()` automatically passes `obj` as `self`.
+
+---
+
+## **Key Takeaways About `self`**
+✅ `self` represents the **current object**.  
+✅ It allows each object to **store its own data separately**.  
+✅ It is used in **instance methods** to access attributes and other methods.  
+✅ `self` **must be the first parameter** in any method (but can have a different name).  
+
+---
+
+## **Frequently Asked Questions**
+### **Q1: Can I use a different name instead of `self`?**
+Yes! Python allows any name for the first parameter, but using `self` is a convention.
+```python
+class Test:
+    def show(myself):
+        print("It works!")
+
+obj = Test()
+obj.show()  # Output: It works!
+```
+However, **always use `self`** to maintain readability.
+
+---
+
+### **Q2: Do static methods require `self`?**
+No! Static methods don’t operate on the object, so they don’t use `self`.
+
+```python
+class MathOperations:
+    @staticmethod
+    def add(a, b):
+        return a + b
+
+print(MathOperations.add(10, 20))  # Output: 30
+```
+Here, `add()` does **not** use `self` because it doesn't access instance variables.
+
+---
+
+## **Final Thoughts**
+- `self` is a **reference to the object** inside class methods.
+- It allows each instance to have **independent attributes**.
+- Without `self`, methods wouldn't be able to access or modify object data.
+
+
+
+## **3. Encapsulation**
+Encapsulation restricts direct access to some object components and prevents accidental modification.
+
+### **Example: Using Private Variables**
+```python
+class Desktop:
+    def __init__(self):
+        self.__max_price = 25000  # Private attribute
+    
+    def sell(self):
+        return f"Selling Price: {self.__max_price}"
+    
+    def set_max_price(self, price):
+        if price > self.__max_price:
+            self.__max_price = price
+
+# Creating an object
+d = Desktop()
+print(d.sell())  # Output: Selling Price: 25000
+
+# Attempting to modify private variable directly (fails)
+d.__max_price = 35000
+print(d.sell())  # Output: Selling Price: 25000
+
+# Modifying using setter method
+d.set_max_price(35000)
+print(d.sell())  # Output: Selling Price: 35000
+```
+
+### **Key Points:**
+- `__max_price` is **private** and cannot be modified directly.
+- Use **getter and setter methods** to access and modify private attributes.
+
+---
+## Why modifying `desktopObj.__max_price = 35000` doesn’t actually change the encapsulated variable and doesn’t throw an error ?   Let’s break it down step by step.
+
+## **Understanding Encapsulation in Python**
+Encapsulation is one of the fundamental principles of **Object-Oriented Programming (OOP)**. It helps restrict direct access to data members (attributes) and allows modification only through **methods** (like setters).  
+
+### **Key Concept: Private Variables (`__max_price`)**
+- In Python, we can define a **private variable** using **double underscores (`__`)** before the variable name.  
+- This **does not truly make it private** but applies **name mangling**, which means:
+  - The variable name is internally changed from `__max_price` to `_ClassName__max_price` (`_Desktop__max_price` in this case).
+  - This prevents accidental modification but does **not** make it fully private.
+
+---
+
+## **Analyzing Your Code Step by Step**
+```python
+class Desktop:
+   def __init__(self):
+      self.__max_price = 25000  # Private variable (name mangling applies)
+
+   def sell(self):
+      return f"Selling Price: {self.__max_price}"  # Returns the actual value
+
+   def set_max_price(self, price):
+      if price > self.__max_price:
+         self.__max_price = price  # Updates the value safely
+
+# Creating object
+desktopObj = Desktop()
+print(desktopObj.sell())  # Output: Selling Price: 25000
+```
+✅ **At this point, `__max_price` is initialized as 25000.**
+
+---
+
+### **Step 1: Attempting to Modify `__max_price` Directly**
+```python
+desktopObj.__max_price = 35000
+print(desktopObj.sell())  # Output: Selling Price: 25000
+```
+### **Why Doesn't the Value Change?**
+- When you write `desktopObj.__max_price = 35000`, **Python does NOT modify the original `__max_price`.**
+- Instead, Python **creates a new variable** in the object with the name `__max_price`, but **this is not the same as the original** one.
+- The actual internal variable **is still named** `_Desktop__max_price` because of **name mangling**.
+
+👉 **This means that `sell()` still prints the old value (25000) because it is reading `_Desktop__max_price`, not `__max_price`.**
+
+---
+
+### **Step 2: Modifying Using the Setter Method**
+```python
+desktopObj.set_max_price(35000)
+print(desktopObj.sell())  # Output: Selling Price: 35000
+```
+✅ **Now, the value changes successfully because:**
+- The method `set_max_price(35000)` modifies `self.__max_price` **inside the class scope**.
+- Since `self.__max_price` (or internally `_Desktop__max_price`) is accessed correctly, the change **actually happens**.
+
+---
+
+## **How to Check Name Mangling?**
+To confirm that the actual variable name is `_Desktop__max_price`, you can print `__dict__`:
+```python
+print(desktopObj.__dict__)  
+```
+💡 **Output:**
+```python
+{'_Desktop__max_price': 25000, '__max_price': 35000}
+```
+👉 You can see that:
+- `_Desktop__max_price = 25000` (the actual private variable).
+- `__max_price = 35000` (a new variable that we mistakenly created).
+
+---
+
+## **How to Properly Modify `__max_price`?**
+There are **two correct ways** to modify `__max_price`:
+1. **Using the Setter Method** (`set_max_price()`).
+2. **Accessing the Mangled Name (`_Desktop__max_price`)** (Not Recommended but Possible).
+
+### ✅ **Correct Way (Using Setter)**
+```python
+desktopObj.set_max_price(35000)
+print(desktopObj.sell())  # Output: Selling Price: 35000
+```
+**Best practice** because it allows controlled modification.
+
+### ❌ **Not Recommended but Possible (Accessing the Mangled Name)**
+```python
+desktopObj._Desktop__max_price = 40000
+print(desktopObj.sell())  # Output: Selling Price: 40000
+```
+Although this works, **it breaks encapsulation** and should be avoided.
+
+---
+
+## **Final Summary**
+| Action | Expected Outcome | Explanation |
+|---------|----------------|-------------|
+| `print(desktopObj.sell())` | 25000 | `__max_price` is initialized as 25000. |
+| `desktopObj.__max_price = 35000` | No effect | A new variable is created instead of modifying the original one. |
+| `print(desktopObj.sell())` | 25000 | `sell()` still refers to `_Desktop__max_price`, not the newly created `__max_price`. |
+| `desktopObj.set_max_price(35000)` | Works correctly | The setter modifies `_Desktop__max_price` properly. |
+| `print(desktopObj.sell())` | 35000 | The modification is now reflected correctly. |
+
+---
+
+## **Key Takeaways**
+✅ **Name mangling (`_ClassName__variable`) prevents accidental modification of private variables.**  
+✅ **Direct modification (`desktopObj.__max_price = 35000`) does not work because it creates a new variable instead.**  
+✅ **Always use setter methods (`set_max_price()`) to modify private variables safely.**  
+✅ **Accessing `_Desktop__max_price` directly works, but it breaks encapsulation and is discouraged.**
+
+
+
+Great question! The `__init__` method in Python is called the **constructor**, and it is **automatically invoked when an object is created**.  
+
+However, Python **does allow you to define other methods** that behave like a constructor, but they won't be **automatically called** when creating an object.
+
+---
+
+## **1️⃣ Can We Use a Different Name Instead of `__init__`?**
+No, if you want a method to be called **automatically when an object is created**, you **must use `__init__`**.  
+
+However, you **can define other methods** to act as **custom constructors**, but they have to be **explicitly called**.
+
+### ❌ **Incorrect Example (Doesn't Work as an Automatic Constructor)**
+```python
+class Example:
+    def my_constructor(self, name):
+        self.name = name
+
+# Creating an object
+obj = Example("John")  # ❌ TypeError: Example() takes no arguments
+```
+🚨 **Error:** Python does not automatically call `my_constructor()` like `__init__()`. 
+
+---
+
+## **2️⃣ Using a Custom Method as a Constructor (But Calling it Manually)**
+You **can define a separate method** to act as a constructor, but you have to **call it explicitly**.
+
+### ✅ **Correct Example**
+```python
+class Example:
+    def my_constructor(self, name):
+        self.name = name
+
+# Creating an object
+obj = Example()  # No error
+obj.my_constructor("John")  # Manually calling the constructor
+
+print(obj.name)  # Output: John
+```
+🔹 **Key Difference:** `my_constructor()` is not called automatically. You must call it explicitly.
+
+---
+
+## **3️⃣ Alternative Constructors with `@classmethod`**
+A better way to define **alternative constructors** is using a **class method (`@classmethod`)**.
+
+### ✅ **Using `@classmethod` to Create an Alternative Constructor**
+```python
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    @classmethod
+    def from_string(cls, string):
+        name, age = string.split('-')
+        return cls(name, int(age))  # Creates an instance using the default constructor
+
+# Using the normal constructor
+p1 = Person("Alice", 30)
+
+# Using an alternative constructor
+p2 = Person.from_string("Bob-25")
+
+print(p1.name, p1.age)  # Output: Alice 30
+print(p2.name, p2.age)  # Output: Bob 25
+```
+✔ `from_string()` is a **custom constructor** that allows us to create a `Person` object from a string.
+
+---
+
+## **4️⃣ Using `__new__()` as a Constructor**
+Python has another special method called `__new__()`, which is **called before `__init__()`**.  
+You can override it to control object creation.
+
+### ✅ **Using `__new__()`**
+```python
+class Example:
+    def __new__(cls):
+        print("Creating an instance...")
+        return super().__new__(cls)
+
+    def __init__(self):
+        print("Initializing the instance...")
+
+obj = Example()
+```
+🛠 **Output:**
+```
+Creating an instance...
+Initializing the instance...
+```
+✔ `__new__()` runs **before** `__init__()` and is mainly used for **custom object creation**.
+
+---
+
+## **Final Summary**
+| Method | Automatically Called? | Purpose |
+|--------|----------------|---------|
+| `__init__()` | ✅ Yes | Default constructor (initializes object attributes). |
+| Custom method (`my_constructor()`) | ❌ No | Can act like a constructor but must be called explicitly. |
+| `@classmethod` alternative constructor | ✅ Yes (if used) | Creates an object in a different way. |
+| `__new__()` | ✅ Yes (before `__init__()`) | Controls object creation before initialization. |
+
+### **Conclusion**
+- **`__init__` is the only automatic constructor.**  
+- **Other methods** can be used as constructors but must be called **explicitly**.  
+- **`@classmethod` is the best way** to create **alternative constructors**.  
+- **`__new__()` is for low-level object creation** before initialization.
+
+Let me know if you need more clarification! 🚀😊
 
 
 
 
+
+## **4. Inheritance**
+Inheritance allows a child class to reuse attributes and methods from a parent class.
+
+### **Example: Single Inheritance**
+```python
+class Parent:
+    def greet(self):
+        return "Hello from Parent"
+
+class Child(Parent):
+    def child_greet(self):
+        return "Hello from Child"
+
+c = Child()
+print(c.greet())  # Output: Hello from Parent
+print(c.child_greet())  # Output: Hello from Child
+```
+
+### **Example: Multiple Inheritance**
+```python
+class A:
+    def method_A(self):
+        return "Method from A"
+
+class B:
+    def method_B(self):
+        return "Method from B"
+
+class C(A, B):  # Inheriting from A and B
+    def method_C(self):
+        return "Method from C"
+
+obj = C()
+print(obj.method_A())  # Output: Method from A
+print(obj.method_B())  # Output: Method from B
+```
+
+---
+
+## **5. Polymorphism**
+Polymorphism allows different classes to define methods with the same name but different behavior.
+
+### **Example: Method Overriding**
+```python
+class Parent:
+    def show(self):
+        return "Parent's method"
+
+class Child(Parent):
+    def show(self):
+        return "Child's method"
+
+c = Child()
+print(c.show())  # Output: Child's method
+```
+
+### **Example: Function Polymorphism**
+```python
+def add(a, b, c=0):
+    return a + b + c
+
+print(add(10, 20))   # Output: 30
+print(add(10, 20, 30))  # Output: 60
+```
+
+---
+
+## **6. Operator Overloading**
+Python allows us to define the behavior of operators (`+`, `-`, `*`, etc.) for custom objects.
+
+### **Example: Overloading `+` for a Vector Class**
+```python
+class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    def __add__(self, other):
+        return Vector(self.x + other.x, self.y + other.y)
+    
+    def __str__(self):
+        return f"Vector({self.x}, {self.y})"
+
+v1 = Vector(2, 3)
+v2 = Vector(4, 5)
+v3 = v1 + v2  # Calls __add__ method
+print(v3)  # Output: Vector(6, 8)
+```
+
+### **Key Points:**
+- `__add__` is a special method that defines behavior for `+`.
+- `v1 + v2` triggers `v1.__add__(v2)`.
+
+---
+
+## **Summary**
+- **Classes and Objects**: Objects are instances of classes with attributes and behaviors.
+- **Encapsulation**: Restricts direct access to data using private variables.
+- **Inheritance**: Allows a class to derive attributes and methods from another class.
+- **Polymorphism**: Enables methods to have different behaviors in different classes.
+- **Operator Overloading**: Customizes operator behavior for user-defined classes.
+
+---
+
+### **Next Steps**
+- **Practice creating your own classes and objects.**
+- **Experiment with encapsulation by using private variables.**
+- **Try implementing different types of inheritance.**
+- **Learn about `super()` to call parent class methods.**
+- **Explore real-world use cases of OOP in Python.**
+
+OOP is a powerful paradigm that makes code modular, reusable, and maintainable. Mastering these concepts will help you write efficient Python programs! 🚀
+
+
+
+# Object-Oriented Analysis and Design (OOAD) in Python
+
+## **Introduction**
+Object-Oriented Analysis and Design (OOAD) is a systematic approach to designing and developing software using Object-Oriented Programming (OOP). This process ensures that **complex systems** can be broken down into manageable components, making code more reusable, maintainable, and scalable.
+
+This chapter covers:
+- **Understanding the OOAD process**
+- **Breaking down a problem into objects and classes**
+- **Creating a class hierarchy and relationships**
+- **Implementing the design using Python**
+- **Iterating through refinement and testing**
+
+---
+
+## **1. Understanding the OOAD Process**
+The OOAD process follows these **five key steps**:
+
+### **Step 1: Write or Draw About the Problem**
+- Describe the problem in simple words or diagrams.
+- Identify how different entities interact within the system.
+- Example (Text-based adventure game):
+  - **“Aliens have invaded a spaceship, and the hero must navigate through different rooms, defeat enemies, and escape.”**
+  - The game involves **scenes (rooms)** and an **engine** that controls the game flow.
+
+### **Step 2: Extract Key Concepts**
+- Identify the **nouns (objects)** and **verbs (actions)** in the description.
+- Example (Key nouns for the game):
+  - Alien, Player, Ship, Maze, Room, Scene, Map, Engine, EscapePod.
+- Example (Key verbs for the game):
+  - Move, Attack, Escape, Enter, Play.
+
+### **Step 3: Create a Class Hierarchy & Object Map**
+- Group similar concepts together to form a **class hierarchy**.
+- Identify **parent-child relationships** between objects.
+- Example (Game class hierarchy):
+  - `Scene` → Base class for different game scenes.
+  - `Map` → Stores scenes and controls navigation.
+  - `Engine` → Controls game execution.
+
+### **Step 4: Code the Classes and Write Tests**
+- Define **classes and methods** for each object.
+- Implement **basic structure and relationships**.
+- Write **unit tests** to validate the code.
+
+### **Step 5: Repeat and Refine**
+- Identify **weaknesses** in the design and **improve** them.
+- Optimize the **class hierarchy and method structure**.
+- Iterate over different steps when necessary.
+
+---
+
+## **2. Implementing the Game Structure**
+Based on the analysis, the following class structure is designed:
+
+### **Class Hierarchy for the Game**
+```
+* Map
+    - next_scene()
+    - opening_scene()
+* Engine
+    - play()
+* Scene
+    - enter()
+* Death (inherits from Scene)
+* Central Corridor (inherits from Scene)
+* Laser Weapon Armory (inherits from Scene)
+* The Bridge (inherits from Scene)
+* Escape Pod (inherits from Scene)
+```
+
+### **Basic Class Implementation**
+```python
+class Scene:
+    def enter(self):
+        pass
+
+class Engine:
+    def __init__(self, scene_map):
+        pass
+
+    def play(self):
+        pass
+
+class Death(Scene):
+    def enter(self):
+        pass
+
+class CentralCorridor(Scene):
+    def enter(self):
+        pass
+
+class LaserWeaponArmory(Scene):
+    def enter(self):
+        pass
+
+class TheBridge(Scene):
+    def enter(self):
+        pass
+
+class EscapePod(Scene):
+    def enter(self):
+        pass
+
+class Map:
+    def __init__(self, start_scene):
+        pass
+
+    def next_scene(self, scene_name):
+        pass
+
+    def opening_scene(self):
+        pass
+
+# Creating objects and running the game
+if __name__ == "__main__":
+    a_map = Map("central_corridor")
+    a_game = Engine(a_map)
+    a_game.play()
+```
+
+At this stage, we have **defined the basic structure**, but the methods need to be implemented.
+
+---
+
+## **3. Iterating and Refining the Design**
+The **OOAD process is iterative**, meaning you **revisit previous steps** as needed. 
+- **New insights** might emerge as we implement the game.
+- **Refactoring** is an important part of making the code better.
+- **Adding new features** will require modifying our class hierarchy.
+
+For example, if we find that `Engine.play()` needs a game loop, we stop and redefine it:
+```python
+class Engine:
+    def __init__(self, game_map):
+        self.game_map = game_map
+
+    def play(self):
+        current_scene = self.game_map.opening_scene()
+        while current_scene:
+            next_scene_name = current_scene.enter()
+            current_scene = self.game_map.next_scene(next_scene_name)
+```
+This is a **top-down approach**—we start from the abstract idea and refine details as we go.
+
+---
+
+## **4. Top-Down vs. Bottom-Up Approaches**
+OOAD typically follows a **top-down** approach, but you can also use a **bottom-up** method:
+
+### **Top-Down Approach**
+1. Define the problem.
+2. Identify objects and their relationships.
+3. Write high-level code first.
+4. Implement the details later.
+5. Iterate and refine.
+
+### **Bottom-Up Approach**
+1. Start with small code snippets.
+2. Refine the code into classes and methods.
+3. Identify key concepts after experimenting.
+4. Write documentation after understanding the system.
+5. Iterate and improve structure.
+
+Example:
+```python
+# Bottom-up approach: first write small test code
+class TestScene:
+    def enter(self):
+        print("Test Scene Entered")
+        return "next_scene"
+
+scene = TestScene()
+scene.enter()
+```
+- Here, **we experiment first** before designing the full system.
+- This works well when **we don’t know the complete structure yet**.
+
+---
+
+## **5. Key Takeaways from OOAD**
+1. **OOAD simplifies complex problems**
+   - Breaking a large problem into smaller components makes coding easier.
+
+2. **Class Hierarchies improve structure**
+   - Use **inheritance** to remove redundancy.
+   - Make a **base class (`Scene`)** for shared functionality.
+
+3. **Encapsulation ensures maintainability**
+   - Store **game logic inside classes** (e.g., `Map`, `Engine`).
+   - Use **methods** to keep data controlled.
+
+4. **Iterative Refinement is key**
+   - Start with a rough **skeleton** and refine it over time.
+   - Write **unit tests** to validate your design.
+
+---
+
+## **Next Steps**
+- **Enhance the game** by implementing user interactions.
+- **Improve error handling** to manage invalid inputs.
+- **Optimize the `Engine` class** to support dynamic game states.
+
+By following **OOAD principles**, we can create **structured, scalable, and maintainable software**. Mastering this approach will improve your ability to design **complex systems efficiently! 🚀**
+
+
+
+
+
+# Automated Testing in Python with PyTest
+
+## **Introduction**
+Automated testing is a crucial part of software development. It helps verify that code changes do not introduce new bugs and ensures the reliability of the software. **PyTest** is a powerful testing framework in Python that makes writing and running tests simple and efficient.
+
+This chapter covers:
+- **Why automated testing is important**
+- **How to install and use PyTest**
+- **Writing test cases using assertions**
+- **Running tests and checking coverage**
+
+---
+
+## **1. Why Automated Testing?**
+### **Key Benefits:**
+1. **Prevents breaking old code** – Ensures new changes don’t introduce bugs in existing functionality.
+2. **Saves time** – Automates repetitive testing tasks.
+3. **Ensures consistency** – Eliminates human error in manual testing.
+4. **Encourages better design** – Helps identify bad API design or logic flaws early.
+5. **Allows safe refactoring** – With proper test coverage, you can modify old code without fear.
+
+**Key Takeaway:** Automated testing **reduces risk and improves software quality**.
+
+---
+
+## **2. Installing PyTest**
+To install PyTest and the coverage tool, use the following commands:
+
+```bash
+# Activate the correct environment
+conda activate lpythw
+
+# Install PyTest
+conda install pytest
+
+# Install coverage tool
+conda install pytest-cov
+```
+
+The **coverage tool** helps ensure that your tests execute all parts of your code.
+
+---
+
+## **3. Writing a Simple Test with PyTest**
+Let’s create a **Person** class that simulates a simple combat system.
+
+### **Main Code (ex50.py)**
+```python
+class Person:
+    def __init__(self, name, hp, damage):
+        self.name = name
+        self.hp = hp
+        self.damage = damage
+
+    def hit(self, target):
+        target.hp -= self.damage
+
+    def alive(self):
+        return self.hp > 0
+```
+
+### **Test Code (ex50_test.py)**
+```python
+from ex50 import Person
+
+def test_combat():
+    boxer = Person("Boxer", 100, 10)
+    zombie = Person("Zed", 1000, 1000)
+
+    # Assert initial health
+    assert boxer.hp == 100, "Boxer should start with 100 HP."
+    assert zombie.hp == 1000, "Zombie should start with 1000 HP."
+
+    # Boxer attacks zombie
+    boxer.hit(zombie)
+    assert zombie.alive(), "Zombie should still be alive."
+
+    # Zombie attacks boxer
+    zombie.hit(boxer)
+    assert not boxer.alive(), "Boxer should be dead."
+```
+
+### **Understanding Assertions:**
+- `assert condition, "Error message if false"`
+- If the condition is **False**, the test fails and prints the error message.
+
+---
+
+## **4. Running Tests with PyTest**
+To run the tests, use:
+```bash
+pytest ex50_test.py
+```
+
+PyTest automatically detects and runs test files that **start with `test_` or end with `_test.py`**.
+
+You can also run all tests in a directory with:
+```bash
+pytest
+```
+
+If a test fails, PyTest provides detailed output to help debug the issue.
+
+---
+
+## **5. Checking Test Coverage**
+To check how much of your code is tested, use:
+```bash
+pytest --cov=ex50
+```
+
+This shows which lines of `ex50.py` were executed during testing and highlights untested areas.
+
+---
+
+## **6. Best Practices for Efficient Testing**
+1. **Write tests from a user’s perspective** – Simulate real-world use cases.
+2. **Test both valid and invalid inputs** – Ensure your program handles errors gracefully.
+3. **Use coverage reports** – Identify untested parts of the code.
+4. **Remove unnecessary code** – If a function isn’t being tested, ask if it’s needed.
+5. **Monitor external services** – If your code depends on external APIs, write tests to confirm they work.
+
+---
+
+### **🔹 Understanding Terms Used in PyTest Testing Code**  
+
+When writing tests in PyTest, we use various **keywords, decorators, assertions, fixtures, and configurations** to define and manage test cases effectively. Let's go over them **one by one with examples**.  
+
+---
+
+## **1️⃣ Test Functions & Naming Conventions**
+PyTest **automatically detects test cases** based on naming patterns:  
+- **Test files** must start with `test_` or end with `_test.py`.  
+- **Test functions** must start with `test_`.  
+
+✅ **Example:**  
+```python
+# test_example.py
+def test_addition():
+    assert 2 + 2 == 4  # Passes ✅
+```
+---
+
+## **2️⃣ Assertions (`assert` Keyword)**
+Assertions **check if a condition is True**. If False, the test **fails**.  
+
+✅ **Examples:**  
+```python
+def test_numbers():
+    assert 10 > 5  # ✅ Passes
+    assert "hello".upper() == "HELLO"  # ✅ Passes
+    assert len([1, 2, 3]) == 3  # ✅ Passes
+```
+💡 **If an assertion fails, PyTest shows the failure message.**  
+
+---
+
+## **3️⃣ Using `pytest` for Advanced Assertions**
+PyTest provides **extra assertion features**, like checking exceptions and warnings.
+
+✅ **Checking if an Exception is Raised**
+```python
+import pytest
+
+def divide(x, y):
+    return x / y
+
+def test_zero_division():
+    with pytest.raises(ZeroDivisionError):
+        divide(10, 0)  # This should raise an error ✅
+```
+✔️ The test **expects** a `ZeroDivisionError`, so it **passes**.  
+
+---
+
+## **4️⃣ Parametrization (`@pytest.mark.parametrize`)**
+Instead of writing multiple similar test cases, we can **run the same test with different values**.
+
+✅ **Example:**
+```python
+import pytest
+
+@pytest.mark.parametrize("a, b, expected", [
+    (2, 3, 5),
+    (5, 5, 10),
+    (-1, 1, 0)
+])
+def test_add(a, b, expected):
+    assert a + b == expected  # Runs the test with different values
+```
+✔️ PyTest **runs this test three times** with different values.
+
+---
+
+## **5️⃣ PyTest Fixtures (`@pytest.fixture`)**
+Fixtures help **set up and tear down test environments** (like creating a database connection).  
+
+✅ **Example:**
+```python
+import pytest
+
+@pytest.fixture
+def sample_data():
+    return {"name": "John", "age": 30}
+
+def test_sample_data(sample_data):
+    assert sample_data["name"] == "John"
+    assert sample_data["age"] == 30
+```
+✔️ The `sample_data` **fixture runs before the test starts**.
+
+---
+
+## **6️⃣ Skipping & Marking Tests (`@pytest.mark.skip`, `@pytest.mark.xfail`)**
+Sometimes, we want to **skip** a test or mark it as **expected to fail**.
+
+✅ **Skipping a Test**
+```python
+import pytest
+
+@pytest.mark.skip(reason="Feature not implemented yet")
+def test_future_feature():
+    assert 2 + 2 == 5  # This test will be skipped 🚀
+```
+
+✅ **Expected Failure (`xfail`)**
+```python
+@pytest.mark.xfail
+def test_known_bug():
+    assert 10 / 0  # Expected to fail but won't break the test run
+```
+✔️ The test **fails but does not stop execution**.
+
+---
+
+## **7️⃣ Running Tests with PyTest CLI**
+Some useful **pytest commands** to run tests:
+
+| Command | Description |
+|---------|-------------|
+| `pytest` | Runs all tests in the current directory |
+| `pytest -v` | Runs tests in **verbose mode** |
+| `pytest -s` | Shows `print()` statements in test output |
+| `pytest -k "test_name"` | Runs only tests matching `"test_name"` |
+| `pytest --maxfail=2` | Stops after **2 failures** |
+| `pytest --cov=my_project` | Runs **test coverage analysis** |
+
+✅ **Example:**  
+```bash
+pytest -v test_example.py  # Runs test_example.py in verbose mode
+```
+
+---
+
+## **8️⃣ Using PyTest Configurations (`pytest.ini`)**
+Instead of writing `pytest` commands manually, we can configure **default behavior** using a `pytest.ini` file.
+
+✅ **Example (`pytest.ini` file in project root):**
+```ini
+[pytest]
+addopts = -v --tb=short
+testpaths = tests  # Run tests only inside the 'tests/' folder
+```
+✔️ **Now, running `pytest` automatically uses these settings.**  
+
+---
+
+## **🔹 Summary of Important PyTest Terms**
+| Term | Description |
+|------|-------------|
+| `assert` | Checks if a condition is True (test passes) or False (test fails) |
+| `pytest.mark.parametrize` | Runs the same test multiple times with different values |
+| `pytest.fixture` | Provides reusable setup data for tests |
+| `pytest.raises` | Checks if an exception is raised |
+| `pytest.mark.skip` | Skips a test |
+| `pytest.mark.xfail` | Marks a test as "expected to fail" |
+| `pytest.ini` | Configures pytest settings |
+| `__pycache__` | Stores compiled test files for faster execution |
+
+---
+
+
+---
+
+### **Want to learn more?**
+Would you like:
+- **Hands-on examples with real projects?**  
+- **Exploring mocking/stubs for complex testing?**  
+- **Integration with CI/CD tools like GitHub Actions?**  
+
+Let me know how deep you want to go! 🚀🔥
+
+
+## **7. Key Takeaways**
+- Automated testing **saves time and improves code reliability**.
+- PyTest makes writing tests simple with **assertions**.
+- Running `pytest` executes all test files automatically.
+- Use **coverage reports** to identify missing test cases.
+- Following best testing practices ensures robust software.
+
+By mastering PyTest, you can write **high-quality, bug-free Python programs** with confidence! 🚀
+
+
+
+
+
+# Exception Handling in Python
+
+## **Introduction**
+Exception handling in Python is a mechanism that allows you to gracefully handle runtime errors in your program. Errors can arise due to various reasons such as incorrect user input, division by zero, file not found, or incorrect data types. Instead of terminating the program abruptly, Python provides a structured way to handle these errors using **try-except** blocks.
+
+This chapter covers:
+- **What are exceptions?**
+- **Handling exceptions using `try-except` blocks**
+- **Using `else` and `finally` with exceptions**
+- **Raising exceptions manually using `raise`**
+- **User-defined exceptions**
+- **Assertions in Python**
+
+---
+## **1. What is an Exception?**
+An exception is an **error that occurs during program execution** that disrupts the normal flow of instructions. Common causes include:
+- Division by zero
+- Accessing a file that doesn’t exist
+- Using an incorrect data type for an operation
+- Indexing an out-of-range element in a list
+
+Python provides built-in exception classes to handle such cases.
+
+**Example:**
+```python
+print(10 / 0)  # ZeroDivisionError
+```
+**Output:**
+```
+ZeroDivisionError: division by zero
+```
+---
+## **2. Handling Exceptions with `try-except` Blocks**
+Python uses `try-except` to catch exceptions and prevent the program from crashing.
+
+### **Basic Syntax:**
+```python
+try:
+    # Code that may cause an exception
+except ExceptionType:
+    # Code to handle the exception
+```
+
+### **Example:**
+```python
+try:
+    num = int(input("Enter a number: "))
+    result = 10 / num
+    print("Result:", result)
+except ZeroDivisionError:
+    print("Error: Cannot divide by zero!")
+except ValueError:
+    print("Error: Invalid input! Please enter a number.")
+```
+**Input & Output:**
+```
+Enter a number: 0
+Error: Cannot divide by zero!
+```
+---
+## **3. Using `else` and `finally` in Exception Handling**
+### **Using `else` Clause**
+- The `else` block runs **only if no exception occurs** in the `try` block.
+
+```python
+try:
+    num = int(input("Enter a number: "))
+    result = 10 / num
+except ZeroDivisionError:
+    print("Error: Cannot divide by zero!")
+else:
+    print("Result:", result)  # Executes only if no exception occurs
+```
+
+### **Using `finally` Clause**
+- The `finally` block **always executes**, regardless of whether an exception occurred or not.
+
+```python
+try:
+    file = open("testfile.txt", "r")
+    content = file.read()
+except FileNotFoundError:
+    print("Error: File not found!")
+finally:
+    print("Closing the file...")
+    file.close()  # Always executes
+```
+
+---
+## **4. Raising Exceptions Using `raise`**
+Sometimes, you might want to raise exceptions manually using the `raise` statement.
+
+### **Example:**
+```python
+def check_age(age):
+    if age < 18:
+        raise ValueError("Age must be 18 or older!")
+    return "Access granted"
+
+try:
+    print(check_age(16))
+except ValueError as e:
+    print("Exception occurred:", e)
+```
+**Output:**
+```
+Exception occurred: Age must be 18 or older!
+```
+
+---
+## **5. User-Defined Exceptions**
+You can define your own exceptions by inheriting from the built-in `Exception` class.
+
+### **Example:**
+```python
+class CustomError(Exception):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
+try:
+    raise CustomError("This is a custom error!")
+except CustomError as e:
+    print("Caught an exception:", e)
+```
+
+**Output:**
+```
+Caught an exception: This is a custom error!
+```
+---
+## **6. Assertions in Python**
+Assertions are used to verify that a condition is true during development. If the condition is false, an `AssertionError` is raised.
+
+### **Example:**
+```python
+def KelvinToFahrenheit(temp):
+    assert temp >= 0, "Temperature below absolute zero!"
+    return (temp - 273) * 1.8 + 32
+
+print(KelvinToFahrenheit(300))  # Valid case
+print(KelvinToFahrenheit(-10))  # Raises AssertionError
+```
+**Output:**
+```
+AssertionError: Temperature below absolute zero!
+```
+
+---
+## **7. Common Built-in Exceptions in Python**
+| Exception | Description |
+|-----------|-------------|
+| `ZeroDivisionError` | Raised when dividing by zero |
+| `ValueError` | Raised when an operation receives an invalid argument |
+| `TypeError` | Raised when an operation is performed on an incorrect data type |
+| `IndexError` | Raised when accessing an invalid index in a list |
+| `KeyError` | Raised when a key is not found in a dictionary |
+| `FileNotFoundError` | Raised when a file does not exist |
+| `AssertionError` | Raised when an assertion fails |
+| `ImportError` | Raised when an import fails |
+
+---
+## **8. Best Practices for Exception Handling**
+✅ **Use specific exception handling** instead of a generic `except:` clause.
+```python
+try:
+    value = int(input("Enter a number: "))
+except ValueError:
+    print("Invalid input! Please enter a valid number.")
+```
+
+✅ **Use `finally` for resource cleanup** (e.g., closing files or database connections).
+```python
+try:
+    file = open("data.txt", "r")
+finally:
+    file.close()
+```
+
+✅ **Avoid using bare `except:` as it catches all exceptions, including system-exiting exceptions.**
+```python
+try:
+    risky_code()
+except Exception as e:
+    print("An error occurred:", e)
+```
+
+✅ **Use logging instead of print statements to track exceptions.**
+```python
+import logging
+
+logging.basicConfig(filename='app.log', level=logging.ERROR)
+try:
+    1 / 0
+except ZeroDivisionError as e:
+    logging.error("Exception occurred", exc_info=True)
+```
+
+Here is a comprehensive explanation of **Standard Built-in Exceptions in Python**, along with detailed examples for each.  
+
+---
+
+# **Standard Built-in Exceptions in Python**
+Python provides a rich set of **built-in exceptions** that help in handling errors efficiently. These exceptions are organized in a hierarchical structure, making debugging and error handling easier.  
+
+---
+
+## **Hierarchy of Built-in Exceptions**
+Python exceptions are derived from the `BaseException` class, which is at the top of the hierarchy. Below is a simplified representation of the exception hierarchy:
+
+```
+BaseException
+│
+├── SystemExit
+├── KeyboardInterrupt
+├── Exception
+│   ├── ArithmeticError
+│   │   ├── FloatingPointError
+│   │   ├── OverflowError
+│   │   ├── ZeroDivisionError
+│   ├── AssertionError
+│   ├── AttributeError
+│   ├── EOFError
+│   ├── ImportError
+│   │   ├── ModuleNotFoundError
+│   ├── LookupError
+│   │   ├── IndexError
+│   │   ├── KeyError
+│   ├── NameError
+│   │   ├── UnboundLocalError
+│   ├── OSError
+│   │   ├── FileNotFoundError
+│   ├── RuntimeError
+│   │   ├── NotImplementedError
+│   ├── SyntaxError
+│   │   ├── IndentationError
+│   ├── TypeError
+│   ├── ValueError
+```
+
+---
+
+## **List of Built-in Exceptions with Examples**
+
+### **1. Exception**
+**Base class for all exceptions.** It is not raised directly but is inherited by all other exceptions.  
+
+Example:
+```python
+try:
+    raise Exception("This is a custom exception.")
+except Exception as e:
+    print(f"Exception caught: {e}")
+```
+**Output:**
+```
+Exception caught: This is a custom exception.
+```
+
+---
+
+### **2. StopIteration**
+Raised when the `next()` method of an iterator reaches the end.  
+
+Example:
+```python
+it = iter([1, 2, 3])
+print(next(it))  # 1
+print(next(it))  # 2
+print(next(it))  # 3
+print(next(it))  # Raises StopIteration
+```
+**Output:**
+```
+1
+2
+3
+Traceback (most recent call last):
+    print(next(it))
+StopIteration
+```
+
+---
+
+### **3. SystemExit**
+Raised when `sys.exit()` is called to terminate the program.  
+
+Example:
+```python
+import sys
+try:
+    sys.exit("Exiting program")
+except SystemExit as e:
+    print(f"SystemExit: {e}")
+```
+**Output:**
+```
+SystemExit: Exiting program
+```
+
+---
+
+### **4. ArithmeticError**
+Base class for errors occurring in numeric calculations.  
+
+Example:
+```python
+try:
+    raise ArithmeticError("Arithmetic error occurred")
+except ArithmeticError as e:
+    print(e)
+```
+**Output:**
+```
+Arithmetic error occurred
+```
+
+---
+
+### **5. OverflowError**
+Raised when a mathematical calculation exceeds the limits of a numeric type.  
+
+Example:
+```python
+import math
+try:
+    print(math.exp(1000))  # Exponential function
+except OverflowError:
+    print("OverflowError: Number too large!")
+```
+**Output:**
+```
+OverflowError: Number too large!
+```
+
+---
+
+### **6. FloatingPointError**
+Raised when a floating point operation fails (rarely occurs in Python).  
+
+Example:
+```python
+import sys
+sys.float_info.max  # Maximum float value
+```
+
+---
+
+### **7. ZeroDivisionError**
+Raised when dividing a number by zero.  
+
+Example:
+```python
+try:
+    x = 5 / 0
+except ZeroDivisionError as e:
+    print(f"Error: {e}")
+```
+**Output:**
+```
+Error: division by zero
+```
+
+---
+
+### **8. AssertionError**
+Raised when an `assert` statement fails.  
+
+Example:
+```python
+try:
+    assert 2 + 2 == 5, "Math is broken!"
+except AssertionError as e:
+    print(e)
+```
+**Output:**
+```
+Math is broken!
+```
+
+---
+
+### **9. AttributeError**
+Raised when an invalid attribute is accessed on an object.  
+
+Example:
+```python
+class Test:
+    pass
+
+obj = Test()
+try:
+    obj.value
+except AttributeError as e:
+    print(e)
+```
+**Output:**
+```
+'Test' object has no attribute 'value'
+```
+
+---
+
+### **10. EOFError**
+Raised when input() reaches end-of-file (EOF).  
+
+Example:
+```python
+try:
+    data = input()
+except EOFError:
+    print("EOFError: End of input reached")
+```
+
+---
+
+### **11. ImportError**
+Raised when an import fails.  
+
+Example:
+```python
+try:
+    import non_existent_module
+except ImportError as e:
+    print(f"ImportError: {e}")
+```
+**Output:**
+```
+ImportError: No module named 'non_existent_module'
+```
+
+---
+
+### **12. KeyboardInterrupt**
+Raised when a user interrupts execution (e.g., pressing `Ctrl + C`).  
+
+Example:
+```python
+try:
+    while True:
+        pass  # Infinite loop
+except KeyboardInterrupt:
+    print("Execution interrupted by user!")
+```
+
+---
+
+### **13. LookupError**
+Base class for lookup errors (e.g., `IndexError`, `KeyError`).  
+
+Example:
+```python
+try:
+    raise LookupError("Generic lookup error")
+except LookupError as e:
+    print(e)
+```
+
+---
+
+### **14. IndexError**
+Raised when trying to access an index that is out of range.  
+
+Example:
+```python
+numbers = [10, 20, 30]
+try:
+    print(numbers[5])
+except IndexError as e:
+    print(f"Error: {e}")
+```
+**Output:**
+```
+Error: list index out of range
+```
+
+---
+
+### **15. KeyError**
+Raised when trying to access a non-existent dictionary key.  
+
+Example:
+```python
+d = {"name": "Alice"}
+try:
+    print(d["age"])
+except KeyError as e:
+    print(f"KeyError: {e}")
+```
+**Output:**
+```
+KeyError: 'age'
+```
+
+---
+
+### **16. NameError**
+Raised when a variable is not defined.  
+
+Example:
+```python
+try:
+    print(x)
+except NameError as e:
+    print(f"NameError: {e}")
+```
+**Output:**
+```
+NameError: name 'x' is not defined
+```
+
+---
+
+### **17. UnboundLocalError**
+Raised when a local variable is referenced before assignment.  
+
+Example:
+```python
+def example():
+    print(x)
+    x = 10
+
+try:
+    example()
+except UnboundLocalError as e:
+    print(f"Error: {e}")
+```
+**Output:**
+```
+Error: local variable 'x' referenced before assignment
+```
+
+---
+
+### **18. TypeError**
+Raised when an operation is applied to an incorrect data type.  
+
+Example:
+```python
+try:
+    print("Hello" + 5)
+except TypeError as e:
+    print(f"TypeError: {e}")
+```
+
+---
+
+### **19. ValueError**
+Raised when a function receives an invalid argument.  
+
+Example:
+```python
+try:
+    num = int("abc")
+except ValueError as e:
+    print(f"ValueError: {e}")
+```
+
+---
+
+### **20. NotImplementedError**
+Raised when an abstract method is not implemented in a subclass.  
+
+Example:
+```python
+class Parent:
+    def method(self):
+        raise NotImplementedError("Subclasses must implement this!")
+
+class Child(Parent):
+    pass
+
+c = Child()
+c.method()
+```
+
+---
+
+
+---
+## **9. Summary**
+- Exceptions allow graceful handling of runtime errors.
+- `try-except` blocks catch exceptions and prevent crashes.
+- `else` executes when no exception occurs; `finally` executes always.
+- `raise` is used to manually trigger exceptions.
+- Custom exceptions can be created by subclassing `Exception`.
+- Assertions help with debugging by enforcing conditions.
+
+By mastering exception handling, you ensure **robust, error-free, and maintainable** Python applications! 🚀
 
 
 
