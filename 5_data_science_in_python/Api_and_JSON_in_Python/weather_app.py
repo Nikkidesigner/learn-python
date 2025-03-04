@@ -4,7 +4,7 @@ import json
 import os
 
 # WeatherAPI Key (Replace with your actual API key)
-API_KEY = "8082f4a780034775bf5112531250403"
+API_KEY = "YOUR_API_KEY"
 
 # Step 1: Get System Location
 def get_location():
