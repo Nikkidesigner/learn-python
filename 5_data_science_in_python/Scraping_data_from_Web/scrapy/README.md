@@ -1,283 +1,373 @@
-This chapter introduces **web scraping** and **automated data extraction** using **Python and BeautifulSoup**. It builds on the previous **data munging** exercise by focusing on **downloading PDFs automatically** from a website instead of doing it manually. 
+# **Scrapy Tutorial: Web Scraping with Scrapy**
 
----
+## **Introduction to Scrapy**
+Scrapy is a powerful and widely-used Python framework for web scraping. It allows developers to efficiently extract data from websites, follow links, and store scraped data in various formats. This tutorial will walk you through the entire process of using Scrapy to scrape data from `quotes.toscrape.com`.
 
-# **1️⃣ Understanding Web Scraping**
-### **🔹 What is Web Scraping?**
-Web scraping is **the process of extracting data from web pages automatically**. Web pages contain **structured data**, but it's often **designed for human reading rather than for computers**. By scraping the web, we can **extract, clean, and store useful data** for **data science, analysis, or automation**.
+### **Prerequisites**
+Before starting, ensure Scrapy is installed on your system. If not, install it using:
+```sh
+pip install scrapy
+```
 
-### **🔹 Why is Web Scraping Useful?**
-✅ Automates repetitive tasks  
-✅ Extracts structured data from unstructured web pages  
-✅ Feeds data to data science and machine learning models  
-✅ Saves time compared to manual data collection  
+## **1. Creating a Scrapy Project**
+To begin scraping, set up a new Scrapy project. Open a terminal and run:
+```sh
+scrapy startproject tutorial
+```
+This creates the following directory structure:
+```
+tutorial/
+    scrapy.cfg            # Configuration file
+    tutorial/             # Project's Python module
+        __init__.py
+        items.py          # Defines data structures
+        middlewares.py    # Custom middleware for Scrapy
+        pipelines.py      # Data processing pipeline
+        settings.py       # Configuration settings
+        spiders/          # Stores spider scripts
+            __init__.py
+```
 
----
-
-# **2️⃣ Web Scraping Basics**
-To scrape a website, you need to:
-
-1️⃣ **Download the HTML page**  
-2️⃣ **Parse the HTML structure** to extract specific elements  
-3️⃣ **Store the extracted data** for later use  
-
-
----
-
----
-
-# **📌 Web Scraping and PDF Processing in Python**
-
-## **1️⃣ Overview**
-This script **scrapes a webpage**, extracts **PDF links**, **downloads PDFs**, extracts **text**, and extracts specific **statistical information** from them.
-
-### **🚀 Key Functionalities**
-✅ Scrapes a webpage for **PDF links**  
-✅ **Downloads** the PDFs to your local system  
-✅ **Extracts text** from each PDF  
-✅ **Finds and prints** relevant statistics  
-
----
-
-## **2️⃣ Required Libraries**
-Before running the script, install the required Python libraries using:
+# **📌 Scrapy Project Folder Structure Breakdown**
+When you create a Scrapy project using:
 ```bash
-pip install pdftotext beautifulsoup4 html5lib
+scrapy startproject tutorial
+```
+It generates the following structure:
+
+```
+tutorial/
+    scrapy.cfg            # Configuration file
+    tutorial/             # Project's Python module
+        __init__.py
+        items.py          # Defines data structures
+        middlewares.py    # Custom middleware for Scrapy
+        pipelines.py      # Data processing pipeline
+        settings.py       # Configuration settings
+        spiders/          # Stores spider scripts
+            __init__.py
 ```
 
 ---
 
-## **3️⃣ Understanding the Code**
-### **🔹 Importing Required Libraries**
+## **📌 Purpose of Each File**
+### **🔹 1. `scrapy.cfg` (Project Configuration File)**
+📌 **Purpose:**
+- Global **configuration file** for the Scrapy project.
+- Defines settings like **log levels, feed exports, and custom paths**.
+
+📌 **Example Content:**
+```ini
+[settings]
+default = tutorial.settings
+```
+✔️ Specifies that the **default settings file** is `tutorial/settings.py`.
+
+---
+
+### **🔹 2. `tutorial/` (Main Project Module)**
+📌 **Purpose:**
+- Contains all the **Scrapy components** (spiders, settings, pipelines, etc.).
+- Serves as a **Python package** (`__init__.py` makes it importable).
+
+---
+
+### **🔹 3. `__init__.py` (Package Initialization)**
+📌 **Purpose:**
+- Marks `tutorial/` and `spiders/` as **Python packages**.
+- Usually **empty**, but can contain package-wide configurations.
+
+✔️ Without this file, **Python won't recognize the directory as a package**.
+
+---
+
+### **🔹 4. `items.py` (Defines Data Structures)**
+📌 **Purpose:**
+- Defines **structured data fields** that the scraper extracts.
+- Works like a **database schema** for your scraped data.
+
+📌 **Example `items.py`:**
 ```python
-import os
-import pdftotext
-from urllib import request
-from bs4 import BeautifulSoup
-from urllib.parse import urljoin
+import scrapy
+
+class ProductItem(scrapy.Item):
+    name = scrapy.Field()
+    price = scrapy.Field()
+    availability = scrapy.Field()
 ```
-| **Library** | **Purpose** |
-|------------|------------|
-| `os` | Handles file operations (checking existence, getting paths) |
-| `pdftotext` | Extracts text from PDFs |
-| `urllib.request` | Fetches content from URLs (downloads PDFs, web requests) |
-| `BeautifulSoup` | Parses and extracts data from HTML (scraping) |
-| `urljoin` | Converts **relative URLs** to **absolute URLs** |
+✔️ Helps organize scraped data in a **consistent format**.
 
 ---
 
-### **🔹 Step 1: Scraping the Web Page**
+### **🔹 5. `middlewares.py` (Custom Middleware for Scrapy)**
+📌 **Purpose:**
+- Contains **custom middlewares** to **process requests & responses**.
+- You can modify **headers, handle captchas, or use proxies**.
+
+📌 **Example Middleware:**
 ```python
-base_url = "https://learncodethehardway.com/setup/python/ttb/"
-response = request.urlopen(base_url)
-soup = BeautifulSoup(response, "html5lib")
+from scrapy import signals
+
+class CustomMiddleware:
+    def process_request(self, request, spider):
+        request.headers["User-Agent"] = "Mozilla/5.0"
+        return None
 ```
-✔️ **`base_url`** → The webpage to scrape PDFs from.  
-✔️ **`request.urlopen(base_url)`** → Opens the URL and fetches the HTML content.  
-✔️ **`BeautifulSoup(response, "html5lib")`** → Parses the HTML using `"html5lib"`.
+✔️ Used for **rotating user agents, handling redirects, or injecting cookies**.
 
 ---
 
-### **🔹 Step 2: Extracting PDF Links**
+### **🔹 6. `pipelines.py` (Data Processing Pipeline)**
+📌 **Purpose:**
+- **Processes and cleans** scraped data before saving.
+- Can **filter, modify, or store data in databases**.
+
+📌 **Example `pipelines.py`:**
 ```python
-pdf_links = [urljoin(base_url, link["href"]) for link in soup.find_all("a", href=True) if link["href"].endswith(".pdf")]
+class PricePipeline:
+    def process_item(self, item, spider):
+        item["price"] = float(item["price"].replace("$", ""))
+        return item
 ```
-✔️ **`soup.find_all("a", href=True)`** → Finds all `<a>` (anchor) tags containing `href`.  
-✔️ **`if link["href"].endswith(".pdf")`** → Filters links that **end with `.pdf`**.  
-✔️ **`urljoin(base_url, link["href"])`** → Converts **relative PDF URLs** to **absolute URLs**.
-
-🔹 **Example:**  
-```html
-<a href="/setup/python/ttb/sample.pdf">Download</a>
-```
-Extracted URL:  
-```
-https://learncodethehardway.com/setup/python/ttb/sample.pdf
-```
+✔️ **Data flows through pipelines** before being stored.
 
 ---
 
-### **🔹 Step 3: Downloading the PDFs**
+### **🔹 7. `settings.py` (Configuration Settings)**
+📌 **Purpose:**
+- Defines Scrapy **settings** like:
+  - **User-Agent**
+  - **Download delays**
+  - **Concurrent requests**
+  - **Pipeline activation**
+
+📌 **Example `settings.py`:**
 ```python
-for pdf_link in pdf_links[:5]:  # Limit to 5 PDFs
-    pdf_name = pdf_link.split("/")[-1]
+BOT_NAME = "tutorial"
+DOWNLOAD_DELAY = 2
+ROBOTSTXT_OBEY = True
+ITEM_PIPELINES = {
+    "tutorial.pipelines.PricePipeline": 300,
+}
 ```
-✔️ **`pdf_links[:5]`** → Processes **only the first 5 PDFs**.  
-✔️ **`pdf_link.split("/")[-1]`** → Extracts **PDF filename** from the URL.  
+✔️ Helps **control how Scrapy behaves**.
 
-🔹 **Example:**
+---
+
+### **🔹 8. `spiders/` (Stores Spider Scripts)**
+📌 **Purpose:**
+- Contains **all web scraping scripts** (spiders).
+- Each spider is a **Python class** that defines:
+  - The **URL to scrape**.
+  - The **data to extract**.
+
+📌 **Example Spider (`spiders/example_spider.py`):**
 ```python
-pdf_link = "https://example.com/files/report.pdf"
-pdf_name = pdf_link.split("/")[-1]  # "report.pdf"
-```
+import scrapy
 
-#### **✅ Checking and Downloading the PDF**
+class ExampleSpider(scrapy.Spider):
+    name = "example"
+    start_urls = ["https://quotes.toscrape.com"]
+
+    def parse(self, response):
+        for quote in response.css("div.quote"):
+            yield {
+                "text": quote.css("span.text::text").get(),
+                "author": quote.css("small.author::text").get()
+            }
+```
+✔️ Scrapy automatically finds **all spiders inside this folder**.
+
+---
+
+### **🔹 9. `spiders/__init__.py`**
+📌 **Purpose:**
+- Marks `spiders/` as a **Python package**.
+- Allows importing spiders from **other scripts**.
+
+✔️ Usually **left empty**.
+
+---
+
+## **📌 Summary of Folder Structure**
+| **File/Folder** | **Purpose** |
+|----------------|------------|
+| **`scrapy.cfg`** | Global Scrapy project configuration |
+| **`tutorial/`** | Main project module |
+| **`__init__.py`** | Marks directory as a Python package |
+| **`items.py`** | Defines data structures (like database schema) |
+| **`middlewares.py`** | Custom processing of requests & responses |
+| **`pipelines.py`** | Cleans, processes, and saves scraped data |
+| **`settings.py`** | Defines project settings (timeouts, delays, pipelines) |
+| **`spiders/`** | Stores web scraping scripts (spiders) |
+| **`spiders/__init__.py`** | Marks `spiders/` as a Python package |
+
+✅ **Now you understand every part of a Scrapy project!** 🚀  
+
+
+
+
+## **2. Writing a Spider**
+A Scrapy **Spider** is a Python class that defines how a website should be scraped. Create a new file `quotes_spider.py` inside the `spiders/` directory and add the following code:
+
 ```python
-if not os.path.exists(pdf_name):
-    save_path = os.path.abspath(pdf_name)
-    with request.urlopen(pdf_link) as response, open(pdf_name, "wb") as pdf_file:
-        pdf_file.write(response.read())
-    print(f"\n \n ✅ Downloaded: {pdf_name} at {save_path}")
-```
-✔️ **`os.path.exists(pdf_name)`** → Checks if the file **already exists**.  
-✔️ **`os.path.abspath(pdf_name)`** → Gets the **full path** of the PDF.  
-✔️ **`request.urlopen(pdf_link).read()`** → **Downloads the PDF**.  
-✔️ **`open(pdf_name, "wb")`** → Saves the PDF in **binary mode (`wb`)**.  
+import scrapy
+from pathlib import Path
 
-🔹 **Example Output:**
-```
-✅ Downloaded: Statistical_Report_Beer_December_2021.pdf at E:\python\Scraping_data\Statistical_Report_Beer_December_2021.pdf
+class QuotesSpider(scrapy.Spider):
+    name = "quotes"
+    
+    def start_requests(self):
+        urls = [
+            "https://quotes.toscrape.com/page/1/",
+            "https://quotes.toscrape.com/page/2/",
+        ]
+        for url in urls:
+            yield scrapy.Request(url=url, callback=self.parse)
+    
+    def parse(self, response):
+        page = response.url.split("/")[-2]
+        filename = f"quotes-{page}.html"
+        Path(filename).write_bytes(response.body)
+        self.log(f"Saved file {filename}")
 ```
 
----
+### **Understanding the Code**
+- `name`: Identifies the spider uniquely within a project.
+- `start_requests()`: Defines the starting URLs.
+- `parse()`: Processes the response and extracts data.
 
-### **🔹 Step 4: Extracting Text from the PDF**
+## **3. Running the Spider**
+Execute the spider using:
+```sh
+scrapy crawl quotes
+```
+This will create files `quotes-1.html` and `quotes-2.html`, containing the scraped pages.
+
+## **4. Extracting Data with Scrapy Selectors**
+Instead of saving HTML, we want to extract quotes and authors. We use **CSS Selectors** and **XPath** to extract elements.
+
+Modify `parse()` in `quotes_spider.py`:
+
 ```python
-with open(pdf_name, "rb") as f:
-    pdf = pdftotext.PDF(f)
+class QuotesSpider(scrapy.Spider):
+    name = "quotes"
+    start_urls = ["https://quotes.toscrape.com/page/1/"]
+
+    def parse(self, response):
+        for quote in response.css("div.quote"):
+            yield {
+                "text": quote.css("span.text::text").get(),
+                "author": quote.css("small.author::text").get(),
+                "tags": quote.css("div.tags a.tag::text").getall(),
+            }
 ```
-✔️ **Opens the downloaded PDF** in **binary mode (`"rb"`)**.  
-✔️ **Converts the PDF into a `pdftotext.PDF` object**, making it readable as text.
 
----
+### **Explanation**
+- `quote.css("span.text::text").get()`: Extracts the quote text.
+- `quote.css("small.author::text").get()`: Extracts the author.
+- `quote.css("div.tags a.tag::text").getall()`: Extracts all tags.
 
-### **🔹 Step 5: Extracting Statistics**
+Run the spider again:
+```sh
+scrapy crawl quotes -o quotes.json
+```
+This saves extracted data to `quotes.json`.
+
+## **5. Recursively Following Links**
+Modify the spider to follow pagination links and scrape all pages.
+
 ```python
-for line in "".join(pdf).split("\n"):
-    if line.startswith("Reporting Period"):
-        print(f"📄 {pdf_name} - {line}")
-```
-✔️ **`"".join(pdf)`** → Converts **all pages** into a **single string**.  
-✔️ **`.split("\n")`** → Splits the text **line by line**.  
-✔️ **`if line.startswith("Reporting Period")`** → Filters lines that contain **relevant statistics**.
+class QuotesSpider(scrapy.Spider):
+    name = "quotes"
+    start_urls = ["https://quotes.toscrape.com/page/1/"]
 
-🔹 **Example PDF Text (Extracted Data)**:
-```
-Reporting Period: December 2021
-Report Date: 10JAN2022
-Production for Current Month: 100000
-```
-🔹 **Output:**
-```
-📄 Statistical_Report_Beer_December_2021.pdf - Reporting Period: December 2021
+    def parse(self, response):
+        for quote in response.css("div.quote"):
+            yield {
+                "text": quote.css("span.text::text").get(),
+                "author": quote.css("small.author::text").get(),
+                "tags": quote.css("div.tags a.tag::text").getall(),
+            }
+        
+        next_page = response.css("li.next a::attr(href)").get()
+        if next_page:
+            yield response.follow(next_page, self.parse)
 ```
 
-
-
-# **📌 Complete Code (Copy & Paste to Run)**
+## **6. Running Scrapy Shell**
+Scrapy provides an interactive shell to test scraping commands. Run:
+```sh
+scrapy shell 'https://quotes.toscrape.com/page/1/'
+```
+Inside the shell, try:
 ```python
-import os
-import pdftotext
-from urllib import request
-from bs4 import BeautifulSoup
-from urllib.parse import urljoin  # Convert relative URLs to absolute URLs
-
-# Step 1: Scrape Web Page
-base_url = "https://learncodethehardway.com/setup/python/ttb/"
-response = request.urlopen(base_url)
-soup = BeautifulSoup(response, "html5lib")
-
-# Step 2: Extract PDF Links
-pdf_links = [urljoin(base_url, link["href"]) for link in soup.find_all("a", href=True) if link["href"].endswith(".pdf")]
-
-# Step 3: Create a Download Folder
-download_folder = "downloaded_pdfs"
-os.makedirs(download_folder, exist_ok=True)  # Creates the folder if it doesn't exist
-
-# Step 4: Download and Process PDFs
-for pdf_link in pdf_links[:5]:  # Limit to 5 PDFs
-    pdf_name = pdf_link.split("/")[-1]  # Extract the filename
-    pdf_path = os.path.join(download_folder, pdf_name)  # Full path where PDF will be saved
-
-    # Download PDF if not already cached
-    if not os.path.exists(pdf_path):
-        with request.urlopen(pdf_link) as response, open(pdf_path, "wb") as pdf_file:
-            pdf_file.write(response.read())
-        print(f"\n✅ Downloaded: {pdf_name} at {os.path.abspath(pdf_path)}")
-
-    # Step 5: Extract Text from PDF
-    with open(pdf_path, "rb") as f:
-        pdf = pdftotext.PDF(f)
-
-    # Step 6: Extract Statistics
-    for line in "".join(pdf).split("\n"):
-        if line.startswith("Reporting Period"):
-            print(f"📄 {pdf_name} - {line}")
+response.css("title::text").get()
+response.css("div.quote span.text::text").getall()
 ```
 
-
-
-
-
----
-
-## **4️⃣ How to Run the Script**
-### ✅ **Run the Script in the Terminal**
-```bash
-python script_name.py
-```
-✔️ The script will:
-1. Scrape PDF links from **the webpage**.
-2. **Download up to 5 PDFs** if not already downloaded.
-3. **Extract text** from the PDFs.
-4. **Print extracted statistics**.
-
----
-
-## **5️⃣ Example Output**
-```
-✅ Downloaded: Statistical_Report_Beer_December_2021.pdf at E:\python\Scraping_data\Statistical_Report_Beer_December_2021.pdf
-📄 Statistical_Report_Beer_December_2021.pdf - Reporting Period: December 2021
-
-✅ Downloaded: Statistical_Report_Beer_November_2021.pdf at E:\python\Scraping_data\Statistical_Report_Beer_November_2021.pdf
-📄 Statistical_Report_Beer_November_2021.pdf - Reporting Period: November 2021
+## **7. Storing Data in Different Formats**
+Scrapy allows exporting data in various formats:
+```sh
+scrapy crawl quotes -o quotes.json
+scrapy crawl quotes -o quotes.csv
+scrapy crawl quotes -o quotes.xml
 ```
 
----
+## **8. Using Spider Arguments**
+Scrapy allows passing arguments to spiders:
+```sh
+scrapy crawl quotes -a category=life
+```
+Modify `quotes_spider.py` to accept arguments:
+```python
+class QuotesSpider(scrapy.Spider):
+    name = "quotes"
 
-## **6️⃣ Summary of Key Concepts**
-| **Concept** | **Usage in the Script** | **Explanation** |
-|-------------|------------------------|----------------|
-| **`BeautifulSoup`** | `soup.find_all("a", href=True)` | Extracts all links (`<a>` tags) from HTML |
-| **`urljoin()`** | `urljoin(base_url, link["href"])` | Converts relative URLs to absolute URLs |
-| **`os.path.exists()`** | `if not os.path.exists(pdf_name)` | Checks if a file already exists |
-| **`request.urlopen()`** | `request.urlopen(pdf_link).read()` | Downloads the PDF file |
-| **`pdftotext.PDF()`** | `pdf = pdftotext.PDF(f)` | Converts a PDF into **text format** |
-| **`split("\n")`** | `for line in "".join(pdf).split("\n")` | Splits text into **lines** |
-| **`startswith()`** | `if line.startswith("Reporting Period")` | Finds lines that start with a specific keyword |
+    def __init__(self, category=None, *args, **kwargs):
+        super(QuotesSpider, self).__init__(*args, **kwargs)
+        self.start_urls = [f"https://quotes.toscrape.com/tag/{category}/"]
+```
 
----
+## **9. Handling Middleware & Pipelines**
+- **Middlewares** modify requests and responses.
+- **Pipelines** process scraped data before storage.
 
-## **🚀 Final Thoughts**
-✅ **Efficiently scrapes, downloads, and processes PDFs.**  
-✅ **Uses `BeautifulSoup` for web scraping and `pdftotext` for text extraction.**  
-✅ **Can be extended to extract more statistics!**  
+Enable pipelines in `settings.py`:
+```python
+ITEM_PIPELINES = {
+    'tutorial.pipelines.TutorialPipeline': 300,
+}
+```
 
-Would you like **to save extracted data to a CSV file**? Let me know! 🚀😊
+Modify `pipelines.py`:
+```python
+class TutorialPipeline:
+    def process_item(self, item, spider):
+        item['text'] = item['text'].upper()  # Convert quotes to uppercase
+        return item
+```
 
+## **10. Handling Robots.txt and User-Agent**
+Some websites block scrapers. Modify `settings.py` to change headers:
+```python
+ROBOTSTXT_OBEY = False
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+```
 
-# **Advanced Web Scraping Tools**
-| **Tool** | **Description** |
-|----------|----------------|
-| **Requests** | Easier HTTP client than `urllib` |
-| **Scrapy** | Powerful web scraping framework |
-| **Playwright** | Runs a full browser for complex scraping |
-| **Common Crawl** | Public dataset of crawled websites |
+## **11. Advanced Web Scraping with Scrapy**
+- **Use Scrapy-Splash** for JavaScript-rendered pages.
+- **Use Scrapy-Playwright** for handling dynamic content.
+- **Integrate Proxies & User Agents** to avoid IP bans.
+- **Deploy Scrapy Spiders** using `scrapy crawl quotes -s JOBDIR=crawls/quotes`.
 
----
+## **Conclusion**
+Scrapy is a powerful tool for web scraping, capable of handling simple and complex scraping tasks. By mastering **spiders, data extraction, following links, handling errors, and exporting data**, you can build efficient and scalable web scrapers.
 
-# **📌 Summary**
-✅ **Scraped PDF links from a webpage**  
-✅ **Downloaded PDFs automatically**  
-✅ **Extracted structured data**  
-✅ **Stored and processed data efficiently**  
+🚀 **Next Steps:**
+- Try scraping different websites.
+- Explore Scrapy middlewares and advanced settings.
+- Deploy Scrapy spiders to run automatically.
 
----
-### **🚀 Next Steps**
-📌 **Improve error handling**  
-📌 **Store extracted data in a database**  
-📌 **Use Scrapy or Playwright for more advanced scraping**  
+Happy Scraping! 🎯
 
----
-**Conclusion:**  
-This **web scraping exercise** demonstrates **real-world automation** techniques. It teaches how to **download files, extract data, and automate repetitive tasks**. This knowledge is essential for **data science, web automation, and testing applications**. 🚀
