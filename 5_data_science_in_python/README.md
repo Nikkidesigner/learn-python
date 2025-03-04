@@ -6,6 +6,7 @@ This topic introduces **data munging**, a crucial skill in software development 
 ### **What is Data Munging?**
 **Data munging** (also called **data wrangling**) refers to cleaning, restructuring, and enriching raw data to make it suitable for analysis or processing. It’s a fundamental step in **data science, automation, and backend development.**  
 
+<<<<<<< HEAD
 ### **Why is Data Munging Important?**
 - **Real-world data is messy.** It comes in inconsistent formats, often with missing values.
 - **It’s required in many fields** like machine learning, analytics, automation, and data visualization.
@@ -37,6 +38,43 @@ Since the data is locked inside a **PDF file**, we’ll use **pdftotext** to ext
 ### **1️⃣ Install Required Libraries**
 We need `pdftotext` to extract text from PDFs.
 
+=======
+<p align="center"> 
+<img  src="https://github.com/user-attachments/assets/1b10c06c-c033-4009-9772-66d0ae10619d" alt="Material Bread logo">
+</p>
+
+### **Why is Data Munging Important?**
+- **Real-world data is messy.** It comes in inconsistent formats, often with missing values.
+- **It’s required in many fields** like machine learning, analytics, automation, and data visualization.
+- **Improperly cleaned data leads to errors** in applications and analysis.
+- **It automates tedious tasks**, making processes more efficient.
+
+---
+
+# **Example Project: Extracting Data from PDFs**
+### **The Problem Statement**
+Your manager asks you to **find the amount of beer manufactured in the US every month**. However:
+- The data is available only in a **PDF format** from the **ATF (Alcohol, Tobacco, and Firearms Department)**.
+- Your task is to **extract specific statistics from the PDF**.
+
+### **Required Data**
+We need to extract:
+1. **Reporting Period**  
+2. **Report Date**  
+3. **Production Data** (for the current month, prior year, and cumulative to date)  
+4. **Stock on Hand Data** (for the current month and prior year)  
+5. **Calculate Sales** = **Production** - **Stock on Hand**  
+
+### **Solution Overview**
+Since the data is locked inside a **PDF file**, we’ll use **pdftotext** to extract and process the content.
+
+---
+
+# **Step-by-Step Guide to Data Munging**
+### **1️⃣ Install Required Libraries**
+We need `pdftotext` to extract text from PDFs.
+
+>>>>>>> c3e21560bad9f0ce049ef00669dfc520f492cca6
 #### **Installation using Conda**
 ```bash
 conda activate lpythw
@@ -755,4 +793,8 @@ Let me know if you need any refinements! 🚀😊
 
 ---
 
+<<<<<<< HEAD
 This exercise **bridges the gap between learning Python and using it for real-world tasks**. By following this structured approach, you’ll gain **confidence in applying Python to real projects**. 🚀
+=======
+This exercise **bridges the gap between learning Python and using it for real-world tasks**. By following this structured approach, you’ll gain **confidence in applying Python to real projects**. 🚀
+>>>>>>> c3e21560bad9f0ce049ef00669dfc520f492cca6
