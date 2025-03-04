@@ -213,7 +213,7 @@ With these skills, you're now equipped to **interact with APIs, process JSON dat
 
 
 
-### **📌 Project: Weather App Using System Location & API**  
+# **📌 Project: Weather App Using System Location & API**  
 This application **automatically fetches the user's location**, sends it to the **Weather API**, retrieves **current weather data**, and stores it in both **JSON and text files**.  
 
 ---
