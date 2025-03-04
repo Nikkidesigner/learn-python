@@ -1,800 +1,427 @@
-This topic introduces **data munging**, a crucial skill in software development where we clean and transform raw data into a usable format. It also explains a structured **process for problem-solving** in programming, particularly for **extracting data from PDFs**.  
+# Working with APIs and JSON in Python
 
----
 
-# **Understanding Data Munging**
-### **What is Data Munging?**
-**Data munging** (also called **data wrangling**) refers to cleaning, restructuring, and enriching raw data to make it suitable for analysis or processing. It’s a fundamental step in **data science, automation, and backend development.**  
 
-<<<<<<< HEAD
-### **Why is Data Munging Important?**
-- **Real-world data is messy.** It comes in inconsistent formats, often with missing values.
-- **It’s required in many fields** like machine learning, analytics, automation, and data visualization.
-- **Improperly cleaned data leads to errors** in applications and analysis.
-- **It automates tedious tasks**, making processes more efficient.
+## **1. Introduction to APIs**
 
----
+### **What is an API?**
+An **Application Programming Interface (API)** is a communication bridge between software applications. APIs allow developers to interact with external services, retrieve or send data, and perform operations programmatically.
 
-# **Example Project: Extracting Data from PDFs**
-### **The Problem Statement**
-Your manager asks you to **find the amount of beer manufactured in the US every month**. However:
-- The data is available only in a **PDF format** from the **ATF (Alcohol, Tobacco, and Firearms Department)**.
-- Your task is to **extract specific statistics from the PDF**.
 
-### **Required Data**
-We need to extract:
-1. **Reporting Period**  
-2. **Report Date**  
-3. **Production Data** (for the current month, prior year, and cumulative to date)  
-4. **Stock on Hand Data** (for the current month and prior year)  
-5. **Calculate Sales** = **Production** - **Stock on Hand**  
-
-### **Solution Overview**
-Since the data is locked inside a **PDF file**, we’ll use **pdftotext** to extract and process the content.
-
----
-
-# **Step-by-Step Guide to Data Munging**
-### **1️⃣ Install Required Libraries**
-We need `pdftotext` to extract text from PDFs.
-
-=======
 <p align="center"> 
-<img  src="https://github.com/user-attachments/assets/1b10c06c-c033-4009-9772-66d0ae10619d" alt="Material Bread logo">
+<img  src="https://github.com/user-attachments/assets/98b54169-a015-4d0f-8a62-85bebc9776c5" alt="Material Bread logo">
 </p>
 
-### **Why is Data Munging Important?**
-- **Real-world data is messy.** It comes in inconsistent formats, often with missing values.
-- **It’s required in many fields** like machine learning, analytics, automation, and data visualization.
-- **Improperly cleaned data leads to errors** in applications and analysis.
-- **It automates tedious tasks**, making processes more efficient.
+### **Components of a Web API**
+A Web API generally consists of:
+1. **HTTP Protocol** - APIs use HTTP methods like GET, POST, PUT, and DELETE.
+2. **Data Format (JSON/XML)** - API responses are usually formatted as JSON.
+3. **Endpoints** - Specific URLs that allow data interaction (e.g., `/api/courses`).
+4. **Authentication** - APIs often require API keys or OAuth tokens for security.
 
 ---
 
-# **Example Project: Extracting Data from PDFs**
-### **The Problem Statement**
-Your manager asks you to **find the amount of beer manufactured in the US every month**. However:
-- The data is available only in a **PDF format** from the **ATF (Alcohol, Tobacco, and Firearms Department)**.
-- Your task is to **extract specific statistics from the PDF**.
 
-### **Required Data**
-We need to extract:
-1. **Reporting Period**  
-2. **Report Date**  
-3. **Production Data** (for the current month, prior year, and cumulative to date)  
-4. **Stock on Hand Data** (for the current month and prior year)  
-5. **Calculate Sales** = **Production** - **Stock on Hand**  
+![image](https://github.com/user-attachments/assets/9a3d8013-59b6-4a3b-9d0e-167f41dd852d)
 
-### **Solution Overview**
-Since the data is locked inside a **PDF file**, we’ll use **pdftotext** to extract and process the content.
+
+
+
+### **Public vs Private APIs**
+- **Public APIs** - Open to the public, meant for developers (e.g., OpenWeatherMap API).
+- **Private APIs** - Restricted for internal use by an organization (e.g., LearnCodeTheHardWay API).
 
 ---
 
-# **Step-by-Step Guide to Data Munging**
-### **1️⃣ Install Required Libraries**
-We need `pdftotext` to extract text from PDFs.
+## **2. Understanding JSON (JavaScript Object Notation)**
 
->>>>>>> c3e21560bad9f0ce049ef00669dfc520f492cca6
-#### **Installation using Conda**
-```bash
+### **What is JSON and Why is it Used?**
+JSON is a lightweight, human-readable data exchange format widely used for APIs. It is easy to parse, platform-independent, and maps directly to Python dictionaries.
+
+### **JSON vs Other Data Formats**
+| Feature         | JSON  | XML  | YAML  |
+|---------------|------|------|------|
+| Readability   | ✅ Easy  | ❌ Verbose | ✅ Very Easy |
+| Parsing Speed | ✅ Fast | ❌ Slower  | ✅ Fast |
+| Human-Readable | ✅ Yes  | ✅ Yes  | ✅ Yes |
+
+### **JSON Syntax**
+```json
+{
+  "name": "Python Course",
+  "modules": [
+    {"id": 1, "title": "Introduction"},
+    {"id": 2, "title": "APIs & JSON"}
+  ],
+  "published": true
+}
+```
+
+---
+
+## **3. Working with JSON in Python**
+
+### **Python's `json` Module**
+Python provides a built-in `json` module for handling JSON data.
+
+### **Convert Python Dictionary to JSON (Serialization)**
+```python
+import json
+
+data = {"course": "Python API", "level": "Intermediate"}
+json_string = json.dumps(data)
+print(json_string)  # Output: {"course": "Python API", "level": "Intermediate"}
+```
+
+### **Convert JSON to Python Dictionary (Deserialization)**
+```python
+json_data = '{"course": "Python API", "level": "Intermediate"}'
+python_dict = json.loads(json_data)
+print(python_dict["course"])  # Output: Python API
+```
+
+### **Read/Write JSON Files**
+```python
+# Writing JSON to a file
+with open("data.json", "w") as file:
+    json.dump(data, file)
+
+# Reading JSON from a file
+with open("data.json", "r") as file:
+    content = json.load(file)
+print(content)
+```
+
+---
+
+## **4. Accessing APIs with Python (`requests` Module)**
+
+### **Install `requests`**
+```sh
 conda activate lpythw
-conda install pdftotext
+conda install requests
 ```
 
-#### **Installation using pip (if Conda is not available)**
-```bash
-pip install pdftotext
-```
-
----
-
-### **2️⃣ Extract Text from the PDF**
+### **Making API Requests**
 ```python
-import pdftotext
+import requests
 
-# Open the PDF file
-with open("beer_statistics.pdf", "rb") as file:
-    pdf = pdftotext.PDF(file)
-
-# Convert PDF pages into a single text string
-pdf_text = "\n".join(pdf)
-
-# Print extracted text
-print(pdf_text)
-```
-🔹 **Explanation:**
-- We open the **PDF file** in **binary mode** (`rb`).
-- `pdftotext.PDF(file)` extracts text from the PDF.
-- `"\n".join(pdf)` merges all pages into a **single text string**.
-- Finally, we print the **raw extracted text** to analyze its structure.
-
----
-
-### **3️⃣ Identify and Extract Relevant Information**
-After printing the extracted text, we need to locate key information (dates, production, stock levels, etc.).
-
-```python
-import re
-
-# Extract reporting period using regex
-reporting_period = re.search(r"Reporting Period:\s*(.*)", pdf_text)
-report_date = re.search(r"Report Date:\s*(.*)", pdf_text)
-
-# Extract production and stock values
-production_current_month = re.search(r"Production for Current Month:\s*([\d,]+)", pdf_text)
-stock_current_month = re.search(r"Stocks on Hand End of Month:\s*([\d,]+)", pdf_text)
-
-# Convert extracted values to usable format
-reporting_period = reporting_period.group(1) if reporting_period else "Not found"
-report_date = report_date.group(1) if report_date else "Not found"
-production_current_month = int(production_current_month.group(1).replace(",", "")) if production_current_month else 0
-stock_current_month = int(stock_current_month.group(1).replace(",", "")) if stock_current_month else 0
-
-# Calculate sales
-sales = production_current_month - stock_current_month
-
-# Print extracted data
-print(f"Reporting Period: {reporting_period}")
-print(f"Report Date: {report_date}")
-print(f"Production (Current Month): {production_current_month}")
-print(f"Stock (End of Month): {stock_current_month}")
-print(f"Sales: {sales}")
-```
-🔹 **Explanation:**
-- We use **regular expressions (regex)** to find specific patterns in the extracted text.
-- `.group(1)` extracts the **first matching group** (actual value).
-- `.replace(",", "")` removes commas from numbers.
-- `int()` converts values into integers for calculations.
-- We **calculate sales** as `Production - Stock on Hand`.
-
----
-
-# **Step-by-Step Approach to Solving Any Problem**
-This process ensures **structured thinking** while solving problems.
-
-### **1️⃣ Create a File or Project**
-Start by creating a Python file (`extract_beer_stats.py`) instead of **staring at the screen**.
-
-```bash
-touch extract_beer_stats.py
+api_url = "https://learncodethehardway.com/api/course"
+response = requests.get(api_url)
+print(response.json())  # Print JSON response
 ```
 
----
-
-### **2️⃣ Describe the Problem Inside the File**
-Before coding, write a **clear description** in comments.
-
-```python
-# This script extracts beer production statistics from a PDF file.
-# It retrieves:
-# - Reporting period
-# - Report date
-# - Production and stock levels
-# - Sales data
-```
-
----
-
-### **3️⃣ Convert Description into Comments for Each Step**
-Break down the **high-level problem** into smaller **steps**.
-
-```python
-# Step 1: Install and import necessary libraries
-# Step 2: Open and read the PDF file
-# Step 3: Extract text content
-# Step 4: Identify relevant data using regex
-# Step 5: Convert extracted data into numerical format
-# Step 6: Calculate sales as Production - Stock on Hand
-# Step 7: Print the results
-```
-
----
-
-### **4️⃣ Write Pseudo-Code (Rough Sketch of Logic)**
-Before writing actual code, **write it in plain English**.
-
-```python
-# Open PDF file
-# Extract text using pdftotext
-# Search for key terms: "Reporting Period", "Report Date", etc.
-# Convert extracted values into numbers
-# Compute the sales: Production - Stock
-# Print the final report
-```
-
----
-
-### **5️⃣ Convert Pseudo-Code into Python**
-Write and test the actual implementation **step by step** (as shown in the example above).
-
----
-
-### **6️⃣ Run the Code and Debug Issues**
-Run your script frequently to catch **early errors**.
-
-```bash
-python extract_beer_stats.py
-```
-
----
-
-### **7️⃣ Clean and Optimize the Code**
-Once working:
-- **Remove unnecessary print statements.**
-- **Optimize regex patterns.**
-- **Structure code using functions.**
-
----
-
-### **8️⃣ Repeat the Process (Refine & Improve)**
-After getting a working solution, **rewrite it** without looking at the original code to strengthen understanding.
-
----
-
-Here’s a well-structured **documentation** for your **PDF data extraction program**. This documentation includes an explanation of the **Python scripts**, **execution commands**, and **expected outputs** for both **single PDF processing** and **multiple PDF processing**.
-
----
-
-# **📌 PDF Data Extraction & Reporting Using Python**
-
-## **1️⃣ Overview**
-This script extracts specific data from **beer statistics reports (PDF files)** using `pdftotext`. The extracted data includes:
-- **Reporting Period**
-- **Report Date**
-- **Production for Current Month**
-- **Stocks on Hand End of Month**
-- **Sales Calculation (Production - Stocks)**
-
----
-
-## **2️⃣ Prerequisites**
-Before running the script, ensure you have installed the required dependencies:
-
-### **🔹 Install `pdftotext`**
-```bash
-pip install pdftotext
-```
-OR, if using **Conda**:
-```bash
-conda install -c conda-forge pdftotext
-```
-
-### **🔹 Check if Installed**
-To verify that `pdftotext` is installed, run:
-```bash
-python -c "import pdftotext; print('pdftotext is installed!')"
-```
-If you see `pdftotext is installed!`, you're ready to proceed.
-
----
-
-## **3️⃣ Extracting Data from a Single PDF**
-The script processes a **single PDF file** and extracts the required information.
-
-### **📌 Python Code (`extract_single_pdf.py`)**
-```python
-import pdftotext
-import sys
-import re  # Import regex module
-
-# Ensure a file argument is provided
-if len(sys.argv) < 2:
-    print("Usage: python extract_single_pdf.py <pdf_file>")
-    sys.exit(1)
-
-pdf_file = sys.argv[1]
-
-try:
-    print(f"\n🔹 Processing: {pdf_file} 🔹\n")  # Print which file is being processed
-
-    # Open the PDF
-    with open(pdf_file, "rb") as infile:
-        pdf = pdftotext.PDF(infile)
-
-    # Convert PDF pages into text
-    text = "\n".join(pdf)  # Combine all text into a single string
-
-    # Extract reporting period and report date
-    reporting_period = re.search(r"Reporting Period:\s*([A-Za-z]+\s\d{4})", text)
-    report_date = re.search(r"Report Date:\s*([\dA-Z]+)", text)
-
-    # Extract production and stock values
-    production_current_month = re.search(r"Production[\s\S]*?\n([\d,]+)", text)
-    stock_current_month = re.search(r"Stocks On Hand End-of-Month\s*\n([\d,]+)", text)
-
-    # Convert extracted values to usable format
-    reporting_period = reporting_period.group(1).strip() if reporting_period else "Not found"
-    report_date = report_date.group(1).strip() if report_date else "Not found"
-    production_current_month = int(production_current_month.group(1).replace(",", "")) if production_current_month else 0
-    stock_current_month = int(stock_current_month.group(1).replace(",", "")) if stock_current_month else 0
-
-    # Calculate sales
-    sales = production_current_month - stock_current_month
-
-    # Display extracted values
-    print(f"📅 Reporting Period: {reporting_period}")
-    print(f"📅 Reporting Date: {report_date}")
-    print(f"🏭 Production (Current Month): {production_current_month}")
-    print(f"📦 Stocks on Hand End of Month: {stock_current_month}")
-    print(f"📊 Sales (Production - Stocks): {sales}")
-
-except FileNotFoundError:
-    print(f"❌ Error: The file '{pdf_file}' was not found.")
-except pdftotext.Error as e:
-    print(f"❌ Error processing PDF '{pdf_file}': {e}")
-except Exception as e:
-    print(f"❌ Unexpected error with '{pdf_file}': {e}")
-```
-
----
-
-### **📌 Running the Script for a Single PDF**
-To extract data from **one PDF**, run:
-```bash
-python extract_single_pdf.py beer_november.pdf
-```
-
-### **📌 Expected Output**
-```
-🔹 Processing: beer_november.pdf 🔹
-
-📅 Reporting Period: November 2021
-📅 Reporting Date: 09MAR2022
-🏭 Production (Current Month): 13094569
-📦 Stocks on Hand End of Month: 10607001
-📊 Sales (Production - Stocks): 2487568
-```
-
----
-
-## **4️⃣ Extracting Data from Multiple PDFs**
-The script now supports **multiple PDFs**, processing each one separately and displaying results.
-
-### **📌 Python Code (`extract_multiple_pdfs.py`)**
-```python
-import pdftotext
-import sys
-import re  # Import regex module
-
-# Ensure at least one file argument is provided
-if len(sys.argv) < 2:
-    print("Usage: python extract_multiple_pdfs.py <pdf_file1> <pdf_file2> ...")
-    sys.exit(1)
-
-pdf_files = sys.argv[1:]  # Get all PDF filenames passed as arguments
-
-for pdf_file in pdf_files:
-    try:
-        print(f"\n🔹 Processing: {pdf_file} 🔹\n")  # Print which file is being processed
-
-        # Open the PDF
-        with open(pdf_file, "rb") as infile:
-            pdf = pdftotext.PDF(infile)
-
-        # Convert PDF pages into text
-        text = "\n".join(pdf)  # Combine all text into a single string
-
-        # Extract reporting period and report date
-        reporting_period = re.search(r"Reporting Period:\s*([A-Za-z]+\s\d{4})", text)
-        report_date = re.search(r"Report Date:\s*([\dA-Z]+)", text)
-
-        # Extract production and stock values
-        production_current_month = re.search(r"Production[\s\S]*?\n([\d,]+)", text)
-        stock_current_month = re.search(r"Stocks On Hand End-of-Month\s*\n([\d,]+)", text)
-
-        # Convert extracted values to usable format
-        reporting_period = reporting_period.group(1).strip() if reporting_period else "Not found"
-        report_date = report_date.group(1).strip() if report_date else "Not found"
-        production_current_month = int(production_current_month.group(1).replace(",", "")) if production_current_month else 0
-        stock_current_month = int(stock_current_month.group(1).replace(",", "")) if stock_current_month else 0
-
-        # Calculate sales
-        sales = production_current_month - stock_current_month
-
-        # Display extracted values for this PDF
-        print(f"📅 Reporting Period: {reporting_period}")
-        print(f"📅 Reporting Date: {report_date}")
-        print(f"🏭 Production (Current Month): {production_current_month}")
-        print(f"📦 Stocks on Hand End of Month: {stock_current_month}")
-        print(f"📊 Sales (Production - Stocks): {sales}")
-        print("-" * 50)  # Separator for better readability
-
-    except FileNotFoundError:
-        print(f"❌ Error: The file '{pdf_file}' was not found.")
-    except pdftotext.Error as e:
-        print(f"❌ Error processing PDF '{pdf_file}': {e}")
-    except Exception as e:
-        print(f"❌ Unexpected error with '{pdf_file}': {e}")
-```
-
----
-
-### **📌 Running the Script for Multiple PDFs**
-To process **multiple PDFs**, run:
-```bash
-python extract_multiple_pdfs.py beer_november.pdf beer_october.pdf beer_september.pdf
-```
-
-### **📌 Expected Output**
-```
-🔹 Processing: beer_november.pdf 🔹
-📅 Reporting Period: November 2021
-📅 Reporting Date: 09MAR2022
-🏭 Production (Current Month): 13094569
-📦 Stocks on Hand End of Month: 10607001
-📊 Sales (Production - Stocks): 2487568
---------------------------------------------------
-
-🔹 Processing: beer_october.pdf 🔹
-📅 Reporting Period: October 2021
-📅 Reporting Date: 12JAN2022
-🏭 Production (Current Month): 12084500
-📦 Stocks on Hand End of Month: 9805000
-📊 Sales (Production - Stocks): 2280000
---------------------------------------------------
-```
-
----
-
-### **📌 Exploring More Features in the `pdftotext` Library**
-The `pdftotext` library is a **lightweight** and **efficient** Python wrapper for extracting text from PDF files.  
-It provides several features to **control how text is extracted and processed**.
-
----
-
-## **🔹 1. Basic PDF Text Extraction**
-### ✅ **Extracting Text from a PDF**
-```python
-import pdftotext
-
-# Open the PDF file in binary mode
-with open("sample.pdf", "rb") as f:
-    pdf = pdftotext.PDF(f)  # Load the PDF
-
-# Convert the entire PDF into a single text string
-text = "\n".join(pdf)  # Joins all pages into one text block
-print(text)  # Prints the extracted text
-```
-✔️ **Default behavior**: Extracts text from all pages and joins them with `\n`.
-
----
-
-## **🔹 2. Extracting Text Page by Page**
-By default, `pdf` behaves **like a list**, where each **element represents one page**.
-
-### ✅ **Extracting Text from a Specific Page**
-```python
-# Extract text from the first page (index 0)
-print(pdf[0])
-```
-
-### ✅ **Looping Through All Pages**
-```python
-for page_number, page in enumerate(pdf):
-    print(f"Page {page_number + 1}:")
-    print(page)
-    print("-" * 50)  # Page separator
-```
-✔️ **Useful when analyzing PDFs where different pages have different formats**.
-
----
-
-## **🔹 3. Extracting Text with Layout Preservation**
-Some PDFs contain **formatted text (columns, tables, etc.)**, and extracting plain text **may distort their structure**.  
-`pdftotext` allows preserving layout using the `layout=True` option.
-
-### ✅ **Preserving the Original Layout**
-```python
-with open("formatted.pdf", "rb") as f:
-    pdf = pdftotext.PDF(f, layout=True)  # Preserve original text formatting
-
-print("\n".join(pdf))  # Display formatted text
-```
-✔️ **This is useful for documents with tables, columns, or structured text.**
-
----
-
-## **🔹 4. Extracting Text from Encrypted PDFs**
-If a **PDF is password-protected**, `pdftotext` allows you to **unlock** it before extracting text.
-
-### ✅ **Handling Password-Protected PDFs**
-```python
-with open("protected.pdf", "rb") as f:
-    pdf = pdftotext.PDF(f, password="mypassword")  # Provide the password
-
-print("\n".join(pdf))  # Extract text
-```
-✔️ If the password is incorrect, it will raise a `RuntimeError`.
-
----
-
-## **🔹 5. Checking Number of Pages in a PDF**
-### ✅ **Getting the Total Page Count**
-```python
-print(f"Total pages in PDF: {len(pdf)}")
-```
-✔️ **Useful for handling multi-page PDFs dynamically**.
-
----
-
-## **🔹 6. Saving Extracted Text to a File**
-Instead of printing the text, we can **save it to a `.txt` file**.
-
-### ✅ **Writing Extracted Text to a File**
-```python
-with open("output.txt", "w", encoding="utf-8") as out_file:
-    out_file.write("\n".join(pdf))
-```
-✔️ This is **useful for data storage, further processing, or manual analysis**.
-
----
-
-## **🔹 7. Extracting Text from PDFs in a Folder**
-If you have **multiple PDFs**, you can process them in a loop.
-
-### ✅ **Batch Processing Multiple PDFs**
+### **Caching API Responses**
 ```python
 import os
 
-folder = "pdf_reports/"
-for filename in os.listdir(folder):
-    if filename.endswith(".pdf"):
-        with open(os.path.join(folder, filename), "rb") as f:
-            pdf = pdftotext.PDF(f)
-            print(f"\n🔹 Extracting text from: {filename}")
-            print("\n".join(pdf))
-            print("-" * 80)
+if not os.path.exists("courses.json"):
+    with open("courses.json", "w") as file:
+        json.dump(response.json(), file)
 ```
-✔️ **This is useful for processing multiple reports automatically.**
 
 ---
 
-## **🔹 8. Error Handling in `pdftotext`**
-### ✅ **Catching PDF Processing Errors**
+## **5. Practical API Example: Extracting Watch Time**
+
+### **Understanding the API Structure**
+The LearnCodeTheHardWay API has the following endpoints:
+- `/api/course` → List of courses
+- `/api/module` → List of modules in a course
+- `/api/lesson` → List of lessons in a module
+- `/api/lesson_media` → Media details for lessons
+
+### **Extracting Watch Time**
+```python
+import requests
+import csv
+
+api_url = "https://learncodethehardway.com/api/course"
+response = requests.get(api_url)
+courses = response.json()
+
+with open("watch_time.csv", "w") as file:
+    writer = csv.writer(file)
+    writer.writerow(["Course", "Total Minutes"])
+    
+    for course in courses:
+        total_minutes = sum(lesson["duration"] for lesson in course["lessons"])
+        writer.writerow([course["title"], total_minutes])
+```
+
+---
+
+## **6. Advanced API Techniques**
+
+### **Using `FastAPI` for API Development**
+```python
+from fastapi import FastAPI
+app = FastAPI()
+
+@app.get("/api/course")
+def get_courses():
+    return [{"id": 1, "title": "Learn Python"}]
+```
+
+### **Querying JSON with `jq`**
+```sh
+curl https://learncodethehardway.com/api/course | jq '.'
+```
+
+### **Testing APIs with `curl`**
+```sh
+curl -X GET https://learncodethehardway.com/api/module?course_id=1
+```
+
+---
+
+## **7. Best Practices for Working with APIs**
+
+### **Error Handling and Logging**
 ```python
 try:
-    with open("sample.pdf", "rb") as f:
-        pdf = pdftotext.PDF(f)
-    print("\n".join(pdf))
-
-except FileNotFoundError:
-    print("❌ Error: The PDF file was not found.")
-except pdftotext.Error as e:
-    print(f"❌ PDF Processing Error: {e}")
-except Exception as e:
-    print(f"❌ Unexpected error: {e}")
+    response = requests.get(api_url)
+    response.raise_for_status()
+except requests.exceptions.RequestException as e:
+    print(f"API Error: {e}")
 ```
-✔️ **Prevents script crashes when dealing with missing files or unreadable PDFs.**
+
+### **Rate Limiting & Avoiding API Abuse**
+- Use caching to minimize API calls.
+- Respect API rate limits (check API documentation).
+- Implement retries with exponential backoff.
+
+### **Security Considerations**
+- Never hardcode API keys in your code.
+- Use environment variables to store credentials.
+- Ensure API endpoints use HTTPS.
+
 
 ---
 
-## **🔹 Summary of Key Features**
-| Feature | Usage |
-|---------|-------|
-| **Basic Extraction** | `pdf = pdftotext.PDF(f)` |
-| **Extract a Specific Page** | `pdf[0]` |
-| **Extract All Pages** | `"\n".join(pdf)` |
-| **Preserve Layout** | `pdf = pdftotext.PDF(f, layout=True)` |
-| **Process Encrypted PDFs** | `pdf = pdftotext.PDF(f, password="mypassword")` |
-| **Get Page Count** | `len(pdf)` |
-| **Save Text to File** | `out_file.write("\n".join(pdf))` |
-| **Process Multiple PDFs** | Loop through `os.listdir(folder)` |
-| **Error Handling** | Use `try-except` blocks |
+## **📌 Key Takeaways**
+✅ APIs allow seamless communication between applications.  
+✅ JSON is the most commonly used data format for APIs.  
+✅ Python’s `requests` module simplifies API interactions.  
+✅ Always cache API responses to reduce unnecessary requests.  
+✅ Follow best practices for security and error handling.  
+
+With these skills, you're now equipped to **interact with APIs, process JSON data, and automate workflows! 🚀**
+
+
+
+
+
+
+### **📌 Project: Weather App Using System Location & API**  
+This application **automatically fetches the user's location**, sends it to the **Weather API**, retrieves **current weather data**, and stores it in both **JSON and text files**.  
 
 ---
 
-
-# **📌 Complete Guide to `re` (Regular Expressions) in Python**
-
-The `re` module in Python is used for **pattern matching and text processing** using **regular expressions (regex)**.  
-It helps in searching, extracting, and manipulating text efficiently.
+# **📌 Features of the App**
+✅ **Detects system location (Latitude & Longitude)**  
+✅ **Fetches weather details from WeatherAPI**  
+✅ **Saves weather data to JSON & text files**  
+✅ **Handles errors (e.g., network issues, invalid API key)**  
 
 ---
 
-## **🔹 1. Importing the `re` Module**
+## **📌 Install Required Libraries**
+Before running the script, install the necessary libraries:
+```bash
+pip install requests geocoder
+```
+---
+
+# **📌 Full Python Code (Copy & Paste to Run)**
 ```python
-import re  # Required for using regular expressions
+import requests
+import geocoder
+import json
+import os
+
+# WeatherAPI Key (Replace with your actual API key)
+API_KEY = "8082f4a780034775bf5112531250403"
+
+# Step 1: Get System Location
+def get_location():
+    g = geocoder.ip("me")  # Gets public IP-based location
+    if g.ok:
+        return g.latlng  # Returns (latitude, longitude)
+    else:
+        print("❌ Could not determine location.")
+        return None
+
+# Step 2: Fetch Weather Data from API
+def get_weather(lat, lon):
+    url = f"http://api.weatherapi.com/v1/current.json?key={API_KEY}&q={lat},{lon}&aqi=no"
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        return response.json()  # Return parsed JSON data
+    else:
+        print(f"❌ API Error: {response.status_code}")
+        return None
+
+# Step 3: Save Weather Data to JSON File
+def save_to_json(data, filename="weather_data.json"):
+    with open(filename, "w") as file:
+        json.dump(data, file, indent=4)
+    print(f"✅ Weather data saved to {filename}")
+
+# Step 4: Save Weather Data to Text File
+def save_to_text(data, filename="weather_data.txt"):
+    with open(filename, "w", encoding="utf-8") as file:
+        file.write(f"📍 Location: {data['location']['name']}, {data['location']['country']}\n")
+        file.write(f"🌡️ Temperature: {data['current']['temp_c']}°C\n")
+        file.write(f"☁️ Condition: {data['current']['condition']['text']}\n")
+        file.write(f"💨 Wind Speed: {data['current']['wind_kph']} kph\n")
+        file.write(f"🌧️ Humidity: {data['current']['humidity']}%\n")
+    print(f"✅ Weather data saved to {filename}")
+
+# Step 5: Main Function to Run the App
+def main():
+    location = get_location()
+    if location:
+        lat, lon = location
+        print(f"📍 Detected Location: Latitude {lat}, Longitude {lon}")
+        
+        weather_data = get_weather(lat, lon)
+        if weather_data:
+            save_to_json(weather_data)
+            save_to_text(weather_data)
+        else:
+            print("❌ Could not fetch weather data.")
+
+# Run the app
+if __name__ == "__main__":
+    main()
+
 ```
-Once imported, you can use various **functions and methods** provided by `re`.
-
 ---
 
-# **📌 Key Functions in `re`**
-Python's `re` module provides several functions to work with **regular expressions**.
-
-| **Function** | **Description** |
-|-------------|----------------|
-| `re.match()` | Checks for a match at the **beginning** of a string |
-| `re.search()` | Searches **anywhere** in the string for a match |
-| `re.findall()` | Returns **all matches** in a list |
-| `re.finditer()` | Returns an **iterator of match objects** |
-| `re.split()` | Splits a string based on a pattern |
-| `re.sub()` | Replaces occurrences of a pattern with another string |
-| `re.compile()` | Compiles a regular expression pattern for reuse |
-
----
-
-# **📌 2. `re.match()` - Match at the Beginning of a String**
-The `match()` function checks if the pattern **matches from the start** of the string.
-
-### ✅ **Example: Matching a Word at the Start**
+# **📌 How the Code Works**
+### ✅ **1. Get System Location**
 ```python
-import re
-
-text = "Hello, welcome to Python!"
-pattern = r"Hello"
-
-match = re.match(pattern, text)
-if match:
-    print("Match found:", match.group())  # Output: Match found: Hello
-else:
-    print("No match found")
+g = geocoder.ip("me")
+location = g.latlng
 ```
-✔️ **Returns `None`** if the pattern is **not at the beginning**.
+- Uses **Geocoder** to get **latitude & longitude** of the system.
+- Uses the **public IP address** to estimate the location.
 
 ---
 
-# **📌 3. `re.search()` - Find First Match Anywhere**
-The `search()` function **searches the entire string** for the pattern.
-
-### ✅ **Example: Searching for a Word**
+### ✅ **2. Fetch Weather Data**
 ```python
-text = "The price is 100 dollars"
-pattern = r"\d+"  # Matches numbers
-
-match = re.search(pattern, text)
-if match:
-    print("Match found:", match.group())  # Output: Match found: 100
+url = f"http://api.weatherapi.com/v1/current.json?key={API_KEY}&q={lat},{lon}&aqi=no"
+response = requests.get(url)
+weather_data = response.json()
 ```
-✔️ **Finds the first occurrence** of the pattern.
+- Sends a **request to WeatherAPI** using the system's **latitude & longitude**.
+- Retrieves **current weather details** as **JSON**.
 
 ---
 
-# **📌 4. `re.findall()` - Find All Matches**
-The `findall()` function returns **all occurrences** of a pattern in a list.
-
-### ✅ **Example: Finding All Numbers**
+### ✅ **3. Save Data to a JSON File**
 ```python
-text = "Order 5 apples, 3 bananas, and 10 oranges."
-pattern = r"\d+"  # Match all numbers
-
-matches = re.findall(pattern, text)
-print("Matches:", matches)  # Output: Matches: ['5', '3', '10']
+with open(filename, "w") as file:
+    json.dump(data, file, indent=4)
 ```
-✔️ **Returns a list of matches** instead of a match object.
+- Saves **structured JSON data** into `weather_data.json`.
 
 ---
 
-# **📌 5. `re.finditer()` - Get Match Objects**
-The `finditer()` function returns an **iterator of match objects**.
-
-### ✅ **Example: Finding All Numbers with Positions**
+### ✅ **4. Save Data to a Text File**
 ```python
-text = "Order 5 apples, 3 bananas, and 10 oranges."
-pattern = r"\d+"  # Match numbers
-
-matches = re.finditer(pattern, text)
-for match in matches:
-    print(f"Found {match.group()} at position {match.start()}-{match.end()}")
+with open(filename, "w") as file:
+    file.write(f"📍 Location: {data['location']['name']}, {data['location']['country']}\n")
+    file.write(f"🌡️ Temperature: {data['current']['temp_c']}°C\n")
 ```
-✔️ Provides **more details** about each match.
+- Extracts **important weather details** and saves them in a **readable text file**.
 
 ---
 
-# **📌 6. `re.split()` - Splitting a String**
-The `split()` function **splits a string** at each match.
-
-### ✅ **Example: Splitting on Spaces**
+### ✅ **5. Run the App**
 ```python
-text = "Python is an amazing language"
-pattern = r"\s+"  # Matches spaces
-
-words = re.split(pattern, text)
-print(words)  # Output: ['Python', 'is', 'an', 'amazing', 'language']
+if __name__ == "__main__":
+    main()
 ```
-✔️ **Useful for tokenizing text**.
+- Calls the `main()` function to:
+  1. **Get location**
+  2. **Fetch weather**
+  3. **Save data to files**
 
 ---
 
-# **📌 7. `re.sub()` - Replacing Text**
-The `sub()` function **replaces occurrences** of a pattern.
-
-### ✅ **Example: Replacing Numbers with `XXX`**
-```python
-text = "My number is 9876543210"
-pattern = r"\d+"
-
-new_text = re.sub(pattern, "XXX", text)
-print(new_text)  # Output: My number is XXX
+# **📌 Example Output**
+### ✅ **Console Output**
 ```
-✔️ **Used for data cleaning or formatting**.
-
----
-
-# **📌 8. `re.compile()` - Precompiling a Pattern**
-The `compile()` function **precompiles** a regex pattern for multiple uses.
-
-### ✅ **Example: Using `compile()` for Repeated Searches**
-```python
-pattern = re.compile(r"\d+")  # Precompile pattern
-
-text1 = "Order 5 apples, 3 bananas"
-text2 = "Stock: 50 units, Price: 100"
-
-print(pattern.findall(text1))  # Output: ['5', '3']
-print(pattern.findall(text2))  # Output: ['50', '100']
+📍 Detected Location: Latitude 51.5074, Longitude -0.1278
+✅ Weather data saved to weather_data.json
+✅ Weather data saved to weather_data.txt
 ```
-✔️ **Improves performance** for multiple searches.
+
+### ✅ **JSON File (`weather_data.json`)**
+```json
+{
+    "location": {
+        "name": "London",
+        "region": "City of London, Greater London",
+        "country": "United Kingdom"
+    },
+    "current": {
+        "temp_c": 12.0,
+        "condition": {
+            "text": "Partly cloudy"
+        },
+        "wind_kph": 15.0,
+        "humidity": 82
+    }
+}
+```
+
+### ✅ **Text File (`weather_data.txt`)**
+```
+📍 Location: London, United Kingdom
+🌡️ Temperature: 12°C
+☁️ Condition: Partly cloudy
+💨 Wind Speed: 15 kph
+🌧️ Humidity: 82%
+```
 
 ---
 
-# **📌 Special Regex Symbols and Meta-Characters**
-| **Symbol** | **Meaning** | **Example** | **Matches** |
-|------------|------------|-------------|-------------|
-| `.` | Any character except newline | `r"a.c"` | `"abc"`, `"a1c"` |
-| `^` | Start of string | `r"^hello"` | `"hello world"` |
-| `$` | End of string | `r"world$"` | `"hello world"` |
-| `\d` | Digit (0-9) | `r"\d+"` | `"123"`, `"456"` |
-| `\D` | Non-digit | `r"\D+"` | `"abc"`, `"xyz"` |
-| `\s` | Whitespace | `r"\s+"` | `" "` (space), `"\t"` (tab) |
-| `\S` | Non-whitespace | `r"\S+"` | `"Hello"`, `"Python3"` |
-| `\w` | Word character (a-z, A-Z, 0-9, _) | `r"\w+"` | `"hello"`, `"python_3"` |
-| `\W` | Non-word character | `r"\W+"` | `"@"`, `"!"` |
-| `\b` | Word boundary | `r"\bword\b"` | `" word "` |
-| `+` | One or more repetitions | `r"\d+"` | `"123"`, `"9"` |
-| `*` | Zero or more repetitions | `r"ab*"` | `"a"`, `"abb"` |
-| `?` | Zero or one repetition | `r"colou?r"` | `"color"`, `"colour"` |
-| `{m,n}` | Between `m` and `n` repetitions | `r"\d{2,4}"` | `"12"`, `"1234"` |
-| `( )` | Capturing group | `r"(ab)+"` | `"abab"` |
-| `|` | OR (matches either pattern) | `r"cat|dog"` | `"cat"`, `"dog"` |
+# **📌 Concepts & Libraries Used**
+| **Concept** | **Usage** |
+|------------|------------|
+| `requests.get()` | Fetches data from the WeatherAPI |
+| `geocoder.ip("me")` | Gets system's latitude & longitude |
+| `json.loads()` | Converts API response into Python dictionary |
+| `json.dump()` | Saves data into a JSON file |
+| `open(filename, "w")` | Writes data into a text file |
 
 ---
 
-# **📌 Summary of `re` Functions**
-| **Function** | **Purpose** | **Returns** |
-|-------------|------------|-------------|
-| `re.match()` | Match at the beginning of a string | `Match object` or `None` |
-| `re.search()` | Find first occurrence anywhere | `Match object` or `None` |
-| `re.findall()` | Find all occurrences | `List of matches` |
-| `re.finditer()` | Find all occurrences with details | `Iterator of Match objects` |
-| `re.split()` | Split string at pattern | `List of substrings` |
-| `re.sub()` | Replace occurrences | `New string` |
-| `re.compile()` | Precompile pattern for reuse | `Compiled pattern object` |
+# **📌 How to Run the App**
+### ✅ **1. Install Required Libraries**
+```bash
+pip install requests geocoder
+```
+### ✅ **2. Run the Script**
+```bash
+python weather_app.py
+```
 
 ---
 
-# **🚀 Final Thoughts**
-✅ The `re` module provides **powerful** text searching and manipulation tools.  
-✅ Understanding **regular expressions** makes **text extraction, validation, and formatting easy**.  
-✅ Using `re.compile()` improves performance **for repeated searches**.  
+# **📌 Summary**
+✅ **Detects system location using Geocoder**  
+✅ **Fetches weather details from WeatherAPI**  
+✅ **Saves results to JSON and text files**  
+✅ **Handles errors gracefully**  
+
+🚀 **Now, anyone can copy, paste, and run this app without modifications!** 🚀
+
+Would you like to **add more weather details like sunrise/sunset or forecast**? 😊
 
 
-### **🚀 Summary**
-- ✅ **`extract_single_pdf.py`** → Processes **one PDF at a time**.
-- ✅ **`extract_multiple_pdfs.py`** → Processes **multiple PDFs in one run**.
-- ✅ **Regex-based extraction** ensures accurate data retrieval.
-
-Let me know if you need any refinements! 🚀😊
-
-# **Key Takeaways**
-✅ **Data munging** is essential for cleaning and structuring data for analysis.  
-✅ **Python’s pdftotext** allows text extraction from PDFs.  
-✅ **Regular expressions (regex)** help extract structured data from unstructured text.  
-✅ **A systematic problem-solving approach** helps in writing cleaner, maintainable code.  
-✅ **Break down the problem** into steps, write pseudo-code, and refine the solution iteratively.
-
----
-
-# **Next Steps**
-🔹 Improve the script by **handling multiple PDF files** at once.  
-🔹 Save extracted data in **CSV or JSON format** for further analysis.  
-🔹 Implement **error handling** for missing or malformed data.  
-🔹 Automate the process by **scheduling the script** to run periodically.
-
----
-
-<<<<<<< HEAD
-This exercise **bridges the gap between learning Python and using it for real-world tasks**. By following this structured approach, you’ll gain **confidence in applying Python to real projects**. 🚀
-=======
-This exercise **bridges the gap between learning Python and using it for real-world tasks**. By following this structured approach, you’ll gain **confidence in applying Python to real projects**. 🚀
->>>>>>> c3e21560bad9f0ce049ef00669dfc520f492cca6
