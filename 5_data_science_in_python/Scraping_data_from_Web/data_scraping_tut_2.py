@@ -2,7 +2,7 @@ import os
 import pdftotext
 from urllib import request
 from bs4 import BeautifulSoup
-from urllib.parse import urljoin  # ✅ Helps convert relative URLs to absolute
+from urllib.parse import urljoin 
 
 
 
